@@ -16,4 +16,4 @@ export async function api(path,options={}) {
   if(!response.ok){let data;try{data=await responseJSON(response);}catch{}const error=new Error(data?.error||`The server answered ${response.status}.`);error.status=response.status;error.save=data?.save;throw error;}
   return response;
 }
-export const apiJSON=async(path,options={})=>responseJSON(await api(path,options));
+export const apiJSON=async(path,options={})=>responseJSON(await api(path,options),{label:'Loading '+path.split('?')[0]});

@@ -42,8 +42,15 @@ test('HTTP timeouts, invalid JSON and partial bodies are recoverable and preserv
  const original=globalThis.fetch;
  try{
   globalThis.fetch=async(url,{signal})=>new Promise((resolve,reject)=>signal.addEventListener('abort',()=>reject(Object.assign(new Error('aborted'),{name:'AbortError'}))));await assert.rejects(()=>fetchTimed('/test',{},5),/timed out/);
-  for(const text of ['<html>Error</html>','null','[]','bad json'])await assert.rejects(()=>responseJSON(new Response(text)),/unreadable/);
+  for(const text of ['<html>Error</html>','null','[]','bad json'])await assert.rejects(()=>responseJSON(new Response(text)),/unreadable|HTML|empty/);
   await assert.rejects(()=>responseJSON({json:()=>new Promise(()=>{})},5),/incomplete/);
   setAPIAccount('expected-account');globalThis.fetch=async(url,options)=>{assert.equal(new Headers(options.headers).get('X-H3-Account'),'expected-account');return new Response(JSON.stringify({files:[]}));};assert.deepEqual(await apiJSON('/library'),{files:[]});
  }finally{globalThis.fetch=original;setAPIAccount(null);}
+});
+
+
+test('upload response errors identify provider status, step and Cloudflare limits without echoing HTML',async()=>{
+ const response=new Response('<html><h1>Error</h1><span class="code">1102</span><p>secret test markup</p></html>',{status:500,headers:{'Content-Type':'text/html','cf-ray':'diagnostic-reference'}});
+ await assert.rejects(()=>responseJSON(response,{label:'Starting upload'}),error=>{assert.match(error.message,/Starting upload/);assert.match(error.message,/HTTP 500/);assert.match(error.message,/Cloudflare 1102/);assert.match(error.message,/processing limit/);assert.doesNotMatch(error.message,/secret test markup|<html>/);assert.equal(error.retryable,true);return true;});
+ const denied=new Response('<html>Access denied</html>',{status:403,headers:{'Content-Type':'text/html'}});await assert.rejects(()=>responseJSON(denied,{label:'Uploading part 2/8'}),error=>{assert.match(error.message,/Uploading part 2/);assert.match(error.message,/HTTP 403/);assert.equal(error.retryable,false);return true;});
 });

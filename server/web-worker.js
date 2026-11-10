@@ -1,9 +1,10 @@
 // Account creation and website file uploads. GPL-2.0-or-later
 import {proofVerifier,verifyLogin,tokenHash,newToken,cookieToken,sessionCookie,clearCookie,SESSION_SECONDS,ITERATIONS,ACCOUNT_ALGORITHM} from './auth.js';
 import {HTTPError,json,readJSON} from './http.js';
+import {serviceError} from './service-errors.js';
 import {createSaveStore} from './save-store.js';
 import {STORAGE_LIMIT} from './storage-quota.js';
-import {libraryAPI,libraryManifest,libraryState} from './web-library.js';
+import {libraryAPI,libraryManifest,libraryFilePage,libraryState} from './web-library.js';
 const HEADERS={'Cross-Origin-Opener-Policy':'same-origin','Cross-Origin-Embedder-Policy':'require-corp','Cross-Origin-Resource-Policy':'same-origin','X-Content-Type-Options':'nosniff','Referrer-Policy':'no-referrer','Content-Security-Policy':"frame-ancestors 'none'; base-uri 'self'; form-action 'self'"};
 const usernameKey=value=>typeof value==='string'?value.trim().toLowerCase():'';
 async function limit(db,request,scope,max,seconds){const now=Math.floor(Date.now()/1000),cutoff=now-seconds,bucket=tokenHash(scope+':'+(request.headers.get('CF-Connecting-IP')||'unknown'));const row=await db.prepare(`INSERT INTO web_rate_limits(bucket,window_start,attempts) VALUES (?,?,1) ON CONFLICT(bucket) DO UPDATE SET attempts=CASE WHEN window_start<? THEN 1 ELSE attempts+1 END,window_start=CASE WHEN window_start<? THEN ? ELSE window_start END RETURNING attempts`).bind(bucket,now,cutoff,cutoff,now).first();if(row.attempts>max)throw new HTTPError(429,'Too many attempts. Please try again later.');}
@@ -43,7 +44,8 @@ export function createWebWorker(schema,schemaVersion){
   if(request.headers.get('X-H3-Account')&&request.headers.get('X-H3-Account')!==account.id)throw new HTTPError(401,'The signed-in account changed in another tab. Reload before continuing.');
   if(route==='/api/logout'&&request.method==='POST'){await db.prepare('DELETE FROM web_sessions WHERE token_hash=?').bind(tokenHash(cookieToken(request))).run();return json({ok:true},200,{'Set-Cookie':clearCookie()});}
   if(route==='/api/session'&&request.method==='GET')return json({user:{id:account.id,username:account.username},save:await store.cloudState(db),libraryReady:!!(await libraryState(db,account.id)).version});
-  if(route==='/api/library'&&request.method==='GET')return json(await libraryManifest(db,account.id));
+  if(route==='/api/library'&&request.method==='GET')return json(await libraryManifest(db,account.id,url.searchParams.get('paged')==='1'));
+  if(route==='/api/library/files'&&request.method==='GET')return json(await libraryFilePage(db,account.id,url));
   if(route.startsWith('/api/game-library/'))return libraryAPI(request,db,url,account.id);
   if(route.startsWith('/api/saves/'))return store.saveAPI(request,db,url);
   throw new HTTPError(404,'Endpoint not found.');
@@ -52,6 +54,6 @@ export function createWebWorker(schema,schemaVersion){
   if(/^\/_worker\.js(?:[/.]|$)/.test(url.pathname))response=new Response('Not found',{status:404});
   else if(url.protocol!=='https:'&&!['localhost','127.0.0.1','[::1]'].includes(url.hostname))response=json({error:'Open the HTTPS game website.'},400);
   else response=url.pathname.startsWith('/api/')?await api(request,env,url):await env.ASSETS.fetch(request);
- }catch(e){response=json({error:e instanceof HTTPError?e.message:'The free service could not complete that request. Retry later; your local files were kept.'},e instanceof HTTPError?e.status:503);}
+ }catch(e){if(e instanceof HTTPError)response=json({error:e.message},e.status);else{const failure=serviceError(e);response=json(failure,failure.status);}}
  const headers=new Headers(response.headers);for(const[k,v]of Object.entries(HEADERS))headers.set(k,v);return new Response(response.body,{status:response.status,headers});}};
 }

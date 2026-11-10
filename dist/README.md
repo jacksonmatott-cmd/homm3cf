@@ -1,4 +1,4 @@
-# Heroes III Personal Edition v6.1.1 — Launcher reliability and full-folder uploads
+# Heroes III Personal Edition v6.2.0 — Batched uploads and launcher reliability
 
 **Upload HOMM3-Cloudflare-Upload.zip directly to Cloudflare Pages.** This is the finished website with its compiled backend, engine and Three Realms assets. Create an account on the website and upload your owned game folder there. Other computers only need your login; game files download automatically into the browser.
 
@@ -67,3 +67,9 @@ The browser runtime is unchanged from [homm3-browser v0.1.0](https://github.com/
 Keyboard routing accepts events with missing keys, legacy key codes and IME input while preserving browser shortcuts. Worker tasks contain message/callback failures and time out when idle; HTTP and JSON failures show retry controls. Required storage, compression, encryption and worker capabilities are checked before sign-in operations. Library deletion and conflict downloads respect the game-tab lock.
 
 The GitHub build also runs `npm run test:browser` in Chromium: website signup/login, nested game-folder upload, real OPFS and D1 transfers, Crown installation, launch/input handling, cloud sync between separate browser contexts, backup export, account switching, storage locks, worker failure and blocked/missing browser capabilities. It uses synthetic original-game fixtures and a simulated engine entry point; this checks the launcher and does not replace gameplay testing with a real owned installation. Developer browser checks need Chromium (or H3_CHROMIUM) and OpenSSL.
+
+## v6.2 upload recovery
+
+The browser now reserves storage with a small summary, registers file metadata in bounded batches, then sends 64 KiB encrypted parts. Metadata is inserted with two bulk JSON queries instead of a separate statement for every file and part. Native Web Crypto verifies checksums on the server. Lost start, metadata, part and finish replies can be retried without double reservations or partial publication. File-list downloads are paged as well. Existing base64 and binary libraries stay readable; keep the same DB binding.
+
+Upload errors identify the operation, HTTP status and a Cloudflare error/reference when available, rather than replacing every failure with an unreadable-response message. Daily database limits and full storage are reported separately; no paid services are enabled. The synthetic regression suite includes 10,000 file records and a 300 MiB compressed archive plan, incomplete uploads, duplicate paths, quota reservations, lost replies and authenticated paged downloads. These are metadata/fixture tests, not a claim that your original commercial installation has been playtested here.

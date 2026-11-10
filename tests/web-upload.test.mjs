@@ -4,7 +4,8 @@ import {DatabaseSync} from 'node:sqlite';
 import {randomUUID,randomBytes} from 'node:crypto';
 import {buildWebWorker} from '../scripts/build-pages-worker.mjs';
 import {selectGameFiles,prepareLibrary,uploadLibrary} from '../dist/game-upload.js';
-import {validateLibraryPlan,validGamePath,MAX_GAME_FILE_BYTES} from '../dist/library-plan.js';
+import {fetchLibrary} from '../dist/game-library.js';
+import {validateLibraryPlan,validGamePath,MAX_GAME_FILE_BYTES,UPLOAD_PART_SIZE,librarySummary,metadataPages,UPLOAD_PROTOCOL} from '../dist/library-plan.js';
 import {cacheAction} from '../dist/cache-policy.js';
 import {STORAGE_LIMIT} from '../server/storage-quota.js';
 import {tokenHash} from '../server/auth-pages.js';
@@ -13,7 +14,7 @@ import {memory,runWorker} from './helpers/storage.mjs';
 const origin='https://heroes.example';
 const compiled=await buildWebWorker();
 class Statement{constructor(db,sql,values=[]){this.db=db;this.sql=sql;this.values=values;}bind(...values){return new Statement(this.db,this.sql,values);}async first(){return this.db.sql.prepare(this.sql).get(...this.values)||null;}async all(){return {results:this.db.sql.prepare(this.sql).all(...this.values)};}async run(){return {meta:{changes:Number(this.db.sql.prepare(this.sql).run(...this.values).changes)}};}}
-class DB{constructor(){this.sql=new DatabaseSync(':memory:');}prepare(sql){return new Statement(this,sql);}async batch(statements){this.sql.exec('BEGIN');try{const result=statements.map(s=>({meta:{changes:Number(this.sql.prepare(s.sql).run(...s.values).changes)}}));this.sql.exec('COMMIT');return result;}catch(e){this.sql.exec('ROLLBACK');throw e;}}}
+class DB{constructor(){this.sql=new DatabaseSync(':memory:');}prepare(sql){return new Statement(this,sql);}async batch(statements){(this.batchSizes??=[]).push(statements.length);this.sql.exec('BEGIN');try{const result=statements.map(s=>({meta:{changes:Number(this.sql.prepare(s.sql).run(...s.values).changes)}}));this.sql.exec('COMMIT');return result;}catch(e){this.sql.exec('ROLLBACK');throw e;}}}
 async function app(){const worker=(await import('data:text/javascript;base64,'+Buffer.from(compiled).toString('base64')+'#'+randomUUID())).default,env={DB:new DB(),ASSETS:{fetch:async()=>new Response('public asset')}};return {worker,env,async request(path,{method='GET',cookie,body,binary,originHeader=origin,accountId}={}){const headers={};if(accountId)headers['X-H3-Account']=accountId;if(cookie)headers.Cookie=cookie;if(method!=='GET')headers.Origin=originHeader;if(body!==undefined)headers['Content-Type']='application/json';if(binary!==undefined)headers['Content-Type']='application/octet-stream';return worker.fetch(new Request(origin+path,{method,headers,body:binary!==undefined?binary:body===undefined?undefined:JSON.stringify(body)}),env);}};}
 async function register(a,name='PlayerOne'){const credentials={username:name,salt:'ae'.repeat(16),proof:tokenHash(name)},r=await a.request('/api/register',{method:'POST',body:credentials});assert.equal(r.status,201,await r.clone().text());return {cookie:r.headers.get('Set-Cookie').split(';')[0],credentials,user:(await r.json()).user};}
 function files(){return ['Data/H3bitmap.lod','Data/H3sprite.lod','Data/Heroes3.snd','Maps/test.h3m','Mp3/theme.mp3'].map(path=>{const name=path.split('/').at(-1),bytes=path.endsWith('.lod')?Buffer.concat([Buffer.from('LOD\0'),randomBytes(200000)]):randomBytes(100);const f=new File([bytes],name);Object.defineProperty(f,'webkitRelativePath',{value:'Heroes3/'+path});return f;});}
@@ -84,4 +85,44 @@ test('upload spool uses temporary device storage and removes it on success and c
  globalThis.fetch=async(input,options={})=>{const headers=new Headers(options.headers);headers.set('Cookie',one.cookie);if(options.method&&options.method!=='GET')headers.set('Origin',origin);return a.worker.fetch(new Request(new URL(input,origin),{...options,headers}),a.env);};
  try{await uploadLibrary(files(),true,()=>{},one.user.id);assert.equal(root.children.has('h3-upload-staging'),false);assert.equal(state.open,0);const bad=files();bad[0]=namedFile('Heroes3/Data/H3bitmap.lod','not a LOD');await assert.rejects(()=>uploadLibrary(bad,true,()=>{},one.user.id),/original LOD/);assert.equal(root.children.has('h3-upload-staging'),false);assert.equal(state.open,0);assert.equal((await(await a.request('/api/library',{cookie:one.cookie})).json()).revision,1);}
  finally{globalThis.fetch=originalFetch;if(originalNavigator)Object.defineProperty(globalThis,'navigator',originalNavigator);else delete globalThis.navigator;}
+});
+
+async function pagedStart(a,cookie,p,baseRevision=0){return a.request('/api/game-library/start',{method:'POST',cookie,body:librarySummary(p.plan,baseRevision)});}
+async function preparePages(a,cookie,p){for(const page of metadataPages(p.plan)){const r=await a.request(`/api/game-library/uploads/${p.plan.version}/files`,{method:'POST',cookie,body:page});assert.equal(r.status,200,await r.clone().text());}}
+
+test('large paged metadata is bounded and cannot publish before all expected parts arrive',async()=>{
+ const a=await app(),one=await register(a),p=await prepared(),chunk=structuredClone(p.plan.files[0].chunks[0]);
+ p.plan.files.push({path:'Data/large.lod',size:512*1024*1024,sha256:'ab'.repeat(32),encoding:'gzip',encodedSize:300*1024*1024,chunks:Array.from({length:4800},()=>({...chunk,size:65536,cipherSize:65552}))});
+ for(let i=p.plan.files.length;i<10000;i++)p.plan.files.push({path:`Maps/Packs/map-${i}.h3m`,size:1,sha256:'cd'.repeat(32),encoding:'gzip',encodedSize:20,chunks:[{...chunk,size:20,cipherSize:36}]});
+ const summary=librarySummary(p.plan,0);assert.ok(JSON.stringify(summary).length<1024);a.env.DB.batchSizes=[];assert.equal((await pagedStart(a,one.cookie,p)).status,200);assert.ok(Math.max(...a.env.DB.batchSizes)<=6);
+ let pages=0;for(const page of metadataPages(p.plan)){a.env.DB.batchSizes=[];const r=await a.request(`/api/game-library/uploads/${p.plan.version}/files`,{method:'POST',cookie:one.cookie,body:page});assert.equal(r.status,200,await r.clone().text());assert.ok(Math.max(...a.env.DB.batchSizes)<=3);pages++;}
+ assert.ok(pages>300);assert.equal(a.env.DB.sql.prepare('SELECT COUNT(*) AS n FROM game_library_files').get().n,10000);assert.equal(a.env.DB.sql.prepare('SELECT COUNT(*) AS n FROM game_parts').get().n,summary.partCount);assert.equal((await finish(a,one.cookie,p)).status,400);assert.equal((await(await a.request('/api/library',{cookie:one.cookie})).json()).files.length,0);
+});
+
+test('metadata retries are idempotent, isolated and reject reordered or duplicate paths',async()=>{
+ const a=await app(),one=await register(a),two=await register(a,'OtherPlayer'),f=files();for(let i=0;i<45;i++)f.push(namedFile(`Heroes3/Maps/extra-${i}.h3m`,'map fixture'));const p=await prepareLibrary(selectGameFiles(f)),summary=librarySummary(p.plan,0);summary.budget+=4096;
+ assert.equal((await a.request('/api/game-library/start',{method:'POST',cookie:one.cookie,body:summary})).status,200);const pages=[...metadataPages(p.plan)],url=`/api/game-library/uploads/${p.plan.version}/files`;
+ assert.equal((await a.request(url,{method:'POST',cookie:two.cookie,body:pages[0]})).status,404);assert.equal((await a.request(url,{method:'POST',cookie:one.cookie,body:pages[1]})).status,409);
+ for(let i=0;i<2;i++)assert.equal((await a.request(url,{method:'POST',cookie:one.cookie,body:pages[0]})).status,200);assert.equal(a.env.DB.sql.prepare('SELECT COUNT(*) AS n FROM game_library_files').get().n,pages[0].files.length);
+ const bad=structuredClone(pages[1]);bad.files[0].path=pages[0].files[0].path.toUpperCase();assert.equal((await a.request(url,{method:'POST',cookie:one.cookie,body:bad})).status,400);assert.equal(a.env.DB.sql.prepare('SELECT COUNT(*) AS n FROM game_library_files').get().n,pages[0].files.length);
+ assert.equal((await a.request(url,{method:'POST',cookie:one.cookie,body:pages[1]})).status,200);await uploadParts(a,one.cookie,p);const final=await finish(a,one.cookie,p);assert.equal(final.status,200,await final.clone().text());assert.equal(a.env.DB.sql.prepare('SELECT encoded_budget FROM game_versions WHERE id=?').get(p.plan.version).encoded_budget,validateLibraryPlan(p.plan).budget);
+});
+
+test('understated metadata reservations cannot consume unreserved storage',async()=>{
+ const a=await app(),one=await register(a),p=await prepared(),summary=librarySummary(p.plan,0);summary.budget=4096+summary.totalCipherSize+summary.partCount*512+summary.fileCount*512;
+ assert.equal((await a.request('/api/game-library/start',{method:'POST',cookie:one.cookie,body:summary})).status,200);const page=[...metadataPages(p.plan)][0],r=await a.request(`/api/game-library/uploads/${p.plan.version}/files`,{method:'POST',cookie:one.cookie,body:page});assert.equal(r.status,400);assert.equal(a.env.DB.sql.prepare('SELECT COUNT(*) AS n FROM game_library_files').get().n,0);assert.equal((await finish(a,one.cookie,p)).status,400);
+});
+
+test('uploader recovers lost start, metadata, data and finish responses without duplicating reservations',async()=>{
+ const a=await app(),one=await register(a),original=globalThis.fetch,missed=new Set(),sizes=[];
+ globalThis.fetch=async(input,options={})=>{const url=new URL(input,origin),headers=new Headers(options.headers);headers.set('Cookie',one.cookie);if(options.method&&options.method!=='GET')headers.set('Origin',origin);if(options.body instanceof Blob)sizes.push(options.body.size);const response=await a.worker.fetch(new Request(url,{...options,headers}),a.env);const phase=url.pathname.endsWith('/start')?'start':url.pathname.endsWith('/files')?'metadata':url.pathname.includes('/parts/')?'part':url.pathname.endsWith('/finish')?'finish':null;if(phase&&!missed.has(phase)){missed.add(phase);return new Response('<html><h1>Error</h1><span>1102</span></html>',{status:500,headers:{'Content-Type':'text/html'}});}return response;};
+ try{const result=await uploadLibrary(files(),true,()=>{},one.user.id);assert.equal(result.revision,1);assert.equal(missed.size,4);assert.ok(Math.max(...sizes)<=UPLOAD_PART_SIZE+16);assert.equal(a.env.DB.sql.prepare('SELECT COUNT(*) AS n FROM game_versions').get().n,1);assert.equal((await(await a.request('/api/library',{cookie:one.cookie})).json()).files.length,5);}finally{globalThis.fetch=original;}
+});
+
+
+test('large libraries download their file list in account-checked pages',async()=>{
+ const a=await app(),one=await register(a),two=await register(a,'OtherPlayer'),f=files();for(let i=0;i<80;i++)f.push(namedFile(`Heroes3/Maps/sub/map-${i}.h3m`,'map fixture'));const p=await prepareLibrary(selectGameFiles(f));await pagedStart(a,one.cookie,p);await preparePages(a,one.cookie,p);await uploadParts(a,one.cookie,p);assert.equal((await finish(a,one.cookie,p)).status,200);
+ const header=await(await a.request('/api/library?paged=1',{cookie:one.cookie})).json();assert.equal(header.paged,true);assert.equal(header.files,undefined);assert.equal(header.fileCount,85);const url=`/api/library/files?version=${p.plan.version}&offset=0`;assert.equal((await a.request(url,{cookie:two.cookie})).status,409);
+ const original=globalThis.fetch;let pages=0;globalThis.fetch=async input=>{if(String(input).includes('/library/files?'))pages++;return a.request(String(input),{cookie:one.cookie});};
+ try{const manifest=await fetchLibrary();assert.equal(manifest.files.length,85);assert.equal(pages,3);assert.deepEqual(manifest.files.map(f=>f.path),p.plan.files.map(f=>f.path));}finally{globalThis.fetch=original;}
 });

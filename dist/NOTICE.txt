@@ -68,3 +68,9 @@ keyboard keys and IME input, preserve browser shortcuts, contain worker and
 network response failures, check browser capabilities, and serialize library
 removal/restoration with the game-tab lock. Add Chromium account/upload/save
 regressions with synthetic files and a simulated engine entry point.
+
+Changes in v6.2 Batched uploads (November 10, 2026): bounded summary/metadata
+requests, bulk SQL inserts, native checksum verification, 64 KiB upload parts,
+idempotent retries and paged private file-list reads. Preserve existing binary
+and base64 libraries, accounts and saves. Report provider status and upload
+step without rendering provider HTML. Add full-folder/retry/quota regressions.

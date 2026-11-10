@@ -25,6 +25,8 @@ The application allows at most **400 MiB of compressed game files per library**,
 
 Try excluding optional music or extra maps if a library is too large. Replacing an existing library keeps the old copy until the new one is complete, so it temporarily needs room for both. If necessary, explicitly remove your stored game files in **Manage game files**, then upload again; cloud saves remain intact. A failed or interrupted upload does not publish an incomplete library. Interrupted uploads must be restarted and expire after two hours without new uploaded parts.
 
+Uploads use small retryable metadata batches and 64 KiB encrypted parts. The website reports the failed step and HTTP status if a provider request fails. It also reads large game-file lists in pages. Keep the same DB binding when updating; existing libraries remain usable.
+
 Cloud save snapshots are limited to 32 MiB compressed, with up to five retained snapshots per account. Cloudflare's daily request/read/write quotas still apply and can temporarily stop transfers. Keep portable `.h3backup` files for progress you cannot afford to lose.
 
 The site ZIP is checked against the Pages dashboard limits of 1000 files and 25 MiB per file. Engine and town files are static assets; uploaded original game files are private authenticated database downloads.
