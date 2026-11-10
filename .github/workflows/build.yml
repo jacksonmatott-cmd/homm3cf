@@ -20,9 +20,11 @@ jobs:
       - run: npm run build
       - run: npm test
       - run: npm run package
+      - name: Stage directly uploadable ZIP
+        run: install -Dm644 ../HOMM3-Cloudflare-Upload.zip artifacts/HOMM3-Cloudflare-Upload.zip
       - uses: actions/upload-artifact@v4
         with:
           name: HOMM3-Cloudflare-Upload
-          path: ../HOMM3-Cloudflare-Upload.zip
+          path: artifacts/HOMM3-Cloudflare-Upload.zip
           if-no-files-found: error
           retention-days: 30

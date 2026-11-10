@@ -17,3 +17,5 @@ dist/source/*.tar.gz
 dist/source/personal-launcher-source.zip
 dist/_worker.js
 *.zip
+
+artifacts/
