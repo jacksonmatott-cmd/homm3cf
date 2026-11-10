@@ -62,3 +62,9 @@ and SHA-256 hashing; temporary encrypted browser upload spool; private binary
 D1 storage and per-file metadata. Existing base64 libraries remain readable.
 Browser SHA-256 uses @noble/hashes 1.8.0 (MIT), with the complete license in
 source/noble-hashes-LICENSE.txt. Accounts, saves and engine binaries are retained.
+
+Changes in v6.1.1 Launcher reliability (November 10, 2026): handle missing
+keyboard keys and IME input, preserve browser shortcuts, contain worker and
+network response failures, check browser capabilities, and serialize library
+removal/restoration with the game-tab lock. Add Chromium account/upload/save
+regressions with synthetic files and a simulated engine entry point.

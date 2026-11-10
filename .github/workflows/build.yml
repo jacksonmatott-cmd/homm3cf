@@ -1,7 +1,7 @@
 name: Build complete Cloudflare website
 on:
   push:
-    branches: [main]
+    branches: [main, "fix/**"]
   workflow_dispatch:
 permissions:
   contents: read
@@ -19,6 +19,7 @@ jobs:
       - run: npm run hydrate
       - run: npm run build
       - run: npm test
+      - run: npm run test:browser
       - run: npm run check:deploy
       - name: Stage directly uploadable ZIP
         run: install -Dm644 ../HOMM3-Cloudflare-Upload.zip artifacts/HOMM3-Cloudflare-Upload.zip

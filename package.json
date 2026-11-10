@@ -1,7 +1,7 @@
 {
   "name": "heroes3-personal-cloudflare",
   "private": true,
-  "version": "6.1.0",
+  "version": "6.1.1",
   "type": "module",
   "engines": {
     "node": ">=22.13"
@@ -18,12 +18,14 @@
     "build": "node scripts/build-web.mjs",
     "hydrate": "node scripts/hydrate-assets.mjs",
     "build:cloudflare": "npm run hydrate && npm run package",
-    "check:deploy": "wrangler deploy --dry-run --outdir .local/worker-dry-run"
+    "check:deploy": "wrangler deploy --dry-run --outdir .local/worker-dry-run",
+    "test:browser": "node scripts/check-browser.mjs"
   },
   "devDependencies": {
     "@noble/hashes": "1.8.0",
     "esbuild": "0.28.2",
     "json5": "2.2.3",
+    "playwright-core": "1.62.1",
     "wrangler": "4.158.0"
   },
   "description": "Complete Cloudflare Pages/Workers Heroes III browser site with accounts, private D1 game uploads and Crown Authority"

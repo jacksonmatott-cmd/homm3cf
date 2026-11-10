@@ -1,6 +1,7 @@
 // Upload owned game files directly from this browser. GPL-2.0-or-later
 import {libraryAAD,bytesToBase64} from './library-format.js';
 import {createFileHash,hashHex} from './file-hash.js';
+import {fetchTimed,responseJSON} from './http-client.js';
 import {GAME_PART_SIZE,validateLibraryPlan,validGamePath,MAX_LIBRARY_BYTES,MAX_GAME_FILES,MAX_GAME_FILE_BYTES,MAX_GAME_RAW_BYTES,BINARY_LIBRARY,GAME_FOLDERS} from './library-plan.js';
 const digest=async bytes=>hashHex(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)));
 const REQUIRED=['h3bitmap.lod','h3sprite.lod','heroes3.snd'];
@@ -39,8 +40,8 @@ export async function prepareLibrary(selected,progress=()=>{},sink){
   const {path,file}=selected[f];if(!Number.isSafeInteger(file.size)||file.size<0||file.size>MAX_GAME_FILE_BYTES)throw new Error('Game files can be at most 2 GiB each: '+path);
   progress({message:`Compressing ${path} (${f+1}/${selected.length})…`,fraction:.3*f/selected.length});
   if(/\.lod$/i.test(path)){const magic=new Uint8Array(await file.slice(0,4).arrayBuffer());if(magic[0]!==76||magic[1]!==79||magic[2]!==68||magic[3]!==0)throw new Error(path+' is not a supported original LOD archive.');}
-  const hash=createFileHash();let rawSize=0;
-  const stream=file.stream().pipeThrough(new TransformStream({transform(bytes,controller){rawSize+=bytes.length;if(rawSize>file.size)throw new Error('The selected file changed. Select the game folder again.');hash.update(bytes);controller.enqueue(bytes);}})).pipeThrough(new CompressionStream('gzip'));
+  const hash=createFileHash();let rawSize=0,lastProgress=performance.now();
+  const stream=file.stream().pipeThrough(new TransformStream({transform(bytes,controller){rawSize+=bytes.length;if(rawSize>file.size)throw new Error('The selected file changed. Select the game folder again.');hash.update(bytes);if(performance.now()-lastProgress>500){progress({message:`Compressing ${path} (${f+1}/${selected.length}) · ${Math.round(100*rawSize/Math.max(1,file.size))}%…`,fraction:.3*(f+rawSize/Math.max(1,file.size))/selected.length});lastProgress=performance.now();}controller.enqueue(bytes);}})).pipeThrough(new CompressionStream('gzip'));
   const entry={path,size:file.size,sha256:'',encoding:'gzip',encodedSize:0,chunks:[]},reader=stream.getReader();let part=new Uint8Array(GAME_PART_SIZE),used=0;
   async function encrypt(bytes){const index=entry.chunks.length,iv=crypto.getRandomValues(new Uint8Array(12)),encrypted=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv,additionalData:libraryAAD(version,path,index,bytes.length)},key,bytes));entry.chunks.push({size:bytes.length,cipherSize:encrypted.length,iv:bytesToBase64(iv),sha256:await digest(encrypted)});payloads.push(await put(encrypted));}
   try{for(;;){const {done,value}=await reader.read();if(done)break;compressedSize+=value.length;entry.encodedSize+=value.length;if(compressedSize>MAX_LIBRARY_BYTES)throw new Error('The compressed library exceeds 400 MiB. Try again without optional music or extra maps.');let at=0;while(at<value.length){const n=Math.min(GAME_PART_SIZE-used,value.length-at);part.set(value.subarray(at,at+n),used);used+=n;at+=n;if(used===GAME_PART_SIZE){await encrypt(part);used=0;}}}if(used)await encrypt(part.subarray(0,used));}
@@ -49,7 +50,7 @@ export async function prepareLibrary(selected,progress=()=>{},sink){
  }
  validateLibraryPlan(plan);return {plan,payloads:sink?await sink.finish(payloads):payloads};
 }
-async function request(path,method='GET',body,accountId){const binary=body instanceof Blob,headers=body===undefined?{}:{'Content-Type':binary?'application/octet-stream':'application/json'};if(accountId)headers['X-H3-Account']=accountId;const response=await fetch('/api'+path,{method,credentials:'same-origin',cache:'no-store',headers,body:body===undefined?undefined:binary?body:JSON.stringify(body)});let data;try{data=await response.json();}catch{throw new Error('The server response was incomplete. Retry the upload.');}if(!response.ok)throw new Error(data.error||'The upload could not finish.');return data;}
+async function request(path,method='GET',body,accountId){const binary=body instanceof Blob,headers=body===undefined?{}:{'Content-Type':binary?'application/octet-stream':'application/json'};if(accountId)headers['X-H3-Account']=accountId;const response=await fetchTimed('/api'+path,{method,credentials:'same-origin',cache:'no-store',headers,body:body===undefined?undefined:binary?body:JSON.stringify(body)});const data=await responseJSON(response);if(!response.ok)throw new Error(data.error||'The upload could not finish.');return data;}
 export async function uploadLibrary(files,includeMusic=true,progress=()=>{},accountId){
  const send=(path,method,body)=>request(path,method,body,accountId),selected=files[0]?.path&&files[0]?.file?files:selectGameFiles(files,includeMusic),sink=await spool();let plan,started=false,finished=false;
  try{

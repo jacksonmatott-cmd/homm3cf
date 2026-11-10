@@ -1,4 +1,4 @@
-# Heroes III Personal Edition v6.1.0 — Full-folder uploads and Crown Authority
+# Heroes III Personal Edition v6.1.1 — Launcher reliability and full-folder uploads
 
 **Upload HOMM3-Cloudflare-Upload.zip directly to Cloudflare Pages.** This is the finished website with its compiled backend, engine and Three Realms assets. Create an account on the website and upload your owned game folder there. Other computers only need your login; game files download automatically into the browser.
 
@@ -61,3 +61,9 @@ The downloadable website includes corresponding source archives and licenses thr
 Automated tests cover registration/login, secure-cookie sessions, account/file/save isolation, upload validation, encrypted compressed file round trips, incomplete transfers, storage reservations, replacement conflicts, browser cache isolation, portable backups, town installation, engine hashes and ZIP structure. Backend tests use real SQLite with a D1-compatible adapter and synthetic original-game fixtures. The deployment pipeline is checked separately on GitHub and Cloudflare. A real commercial library and full gameplay were not tested here; the supplied Windows game folder is not accessible from this workspace.
 
 The browser runtime is unchanged from [homm3-browser v0.1.0](https://github.com/mihaicristianfarcas/homm3-browser/tree/v0.1.0), using VCMI 1.7.5. Engine and launcher code: GPL-2.0-or-later. Town art/adaptations: CC-BY-SA 4.0 with author credits. @noble/hashes 1.8.0: MIT, license included. Heroes of Might and Magic is a Ubisoft trademark; this project is unaffiliated with Ubisoft.
+
+## Launcher reliability checks
+
+Keyboard routing accepts events with missing keys, legacy key codes and IME input while preserving browser shortcuts. Worker tasks contain message/callback failures and time out when idle; HTTP and JSON failures show retry controls. Required storage, compression, encryption and worker capabilities are checked before sign-in operations. Library deletion and conflict downloads respect the game-tab lock.
+
+The GitHub build also runs `npm run test:browser` in Chromium: website signup/login, nested game-folder upload, real OPFS and D1 transfers, Crown installation, launch/input handling, cloud sync between separate browser contexts, backup export, account switching, storage locks, worker failure and blocked/missing browser capabilities. It uses synthetic original-game fixtures and a simulated engine entry point; this checks the launcher and does not replace gameplay testing with a real owned installation. Developer browser checks need Chromium (or H3_CHROMIUM) and OpenSSL.
