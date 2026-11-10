@@ -42,6 +42,11 @@ config=json.loads((ROOT/'wrangler.jsonc').read_text())
 assert config['main']=='dist/_worker.js'
 assert config['assets']['binding']=='ASSETS' and config['assets']['run_worker_first']==['/api/*']
 assert any(binding['binding']=='DB' for binding in config['d1_databases'])
+for binding in config['d1_databases']:
+    if 'database_id' in binding:
+        assert re.fullmatch(r'[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}',binding['database_id']), 'D1 database_id must be an actual UUID or omitted for automatic provisioning'
+assert 'REPLACE_WITH_' not in json.dumps(config), 'A deployment placeholder remains'
+assert config.get('build',{}).get('command')=='npm run build:cloudflare', 'Worker deployments must restore the complete game assets before upload'
 assert not config.get('r2_buckets'), 'A storage-bucket binding remains'
 assert not config.get('kv_namespaces') and not config.get('durable_objects'), 'Extra storage service configured'
 assert '_headers' not in (DIST/'.assetsignore').read_text().splitlines(), 'Static security headers would be ignored'

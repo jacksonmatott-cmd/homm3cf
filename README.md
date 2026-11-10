@@ -1,10 +1,20 @@
-# Heroes III Personal Edition v6 — Crown Authority
+# Heroes III Personal Edition v6.0.1 — Crown Authority
 
 **Upload HOMM3-Cloudflare-Upload.zip directly to Cloudflare Pages.** This is the finished website with its compiled backend, engine and Three Realms assets. Create an account on the website and upload your owned game folder there. Other computers only need your login; game files download automatically into the browser.
 
 No local setup scripts, npm, Github, R2 or paid subscription are needed. One **free D1 database binding named DB** is required for accounts, uploaded game files and cloud saves. Bind it in the Pages dashboard and redeploy the same ZIP. Tables initialize automatically. [CLOUDFLARE-UPLOAD.md](CLOUDFLARE-UPLOAD.md) gives the short dashboard steps.
 
 Every future update is a complete directly uploadable site ZIP. Keep the same D1 database when updating to retain accounts, libraries and saves. No patch stacking, personalized ZIP building or repeated original-game upload is required for later updates.
+
+## GitHub → Cloudflare Workers deployment
+
+The repository also supports the **Worker** named `homm3cf`. Cloudflare's default `npx wrangler deploy` command now runs the complete game build automatically, including pinned engine/town downloads, compiled backend, source archives and Crown Authority. No separate local build command is required.
+
+The `DB` D1 binding intentionally has **no hardcoded database ID or database name**. Wrangler 4.158.0 reuses an existing D1 binding named DB on this same Worker; for a first deployment, it can automatically create `homm3cf-db`. This fixes Cloudflare error **10021** caused by the old placeholder ID. Future deployments keep using that binding. No paid-plan or storage-product changes are made.
+
+If moving an existing **Pages** site to this Worker, connect that Pages site's existing D1 database as **DB** on the Worker before deploying to preserve those accounts and uploads. Separate Cloudflare projects do not automatically share a database. The directly uploadable Pages ZIP remains supported with its normal dashboard binding.
+
+The build pipeline checks a real `wrangler deploy --dry-run`, and packaging rejects placeholder or malformed explicit D1 IDs. This validates the Worker upload without accessing a production database.
 
 ## Accounts and game files
 

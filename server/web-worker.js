@@ -17,7 +17,7 @@ export function createWebWorker(schema,schemaVersion){
  const ready=new WeakMap();
  async function initialize(db){if(!ready.has(db)){const promise=(async()=>{try{const row=await db.prepare('SELECT version FROM h3_pages_schema WHERE id=1').first();if(row?.version===schemaVersion)return;}catch{}await db.batch(schema.split(';').map(s=>s.trim()).filter(Boolean).map(s=>db.prepare(s)));})();ready.set(db,promise);promise.catch(()=>ready.delete(db));}return ready.get(db);}
  async function api(request,env,url){
-  if(!env.DB){if(url.pathname==='/api/status')return json({configured:false,setupMessage:'In Cloudflare Pages, add a free D1 database binding named DB under Settings → Bindings, then redeploy this same ZIP.'});throw new HTTPError(503,'Add the free D1 binding named DB and redeploy.');}
+  if(!env.DB){if(url.pathname==='/api/status')return json({configured:false,setupMessage:'Connect a free D1 database binding named DB in your Cloudflare project settings and redeploy. GitHub Worker deployments can create the binding automatically.'});throw new HTTPError(503,'Add the free D1 binding named DB and redeploy.');}
   await initialize(env.DB);const db=env.DB,route=url.pathname;
   if(route==='/api/status'&&request.method==='GET')return json({configured:true,registrationEnabled:true,edition:'free-web-upload'});
   if(!['GET','HEAD'].includes(request.method)&&request.headers.get('Origin')!==url.origin)throw new HTTPError(403,'This request must come from your game website.');

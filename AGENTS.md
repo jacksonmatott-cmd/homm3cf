@@ -11,3 +11,6 @@
 
 - Source is now in GitHub: jacksonmatott-cmd/homm3cf. Push authorized updates there and retain the reproducible full-asset build/workflow. Do not commit commercial originals, cloud libraries, save databases or secrets.
 - Preserve Crown Authority, its native income/council rules and optional Three Realms compatibility. Use the existing pinned VCMI engine; unsupported Lua scripts are not an implementation of this mod.
+
+- Worker Git deployments use the exact name homm3cf, a complete custom build, and automatic D1 binding without a placeholder ID/name. Preserve any already-bound DB. Never replace an existing production database as a deployment fix.
+- Keep the GitHub dry-run deployment check and the package guard against invalid D1 IDs. Continue supplying a complete Pages ZIP for direct upload.

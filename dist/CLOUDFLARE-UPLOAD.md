@@ -36,3 +36,11 @@ Official references: [Direct Upload](https://developers.cloudflare.com/pages/get
 The full ZIP adds Crown Authority while retaining the v5 account/database format. Upload it over the current deployment and keep the same DB binding. No migration, account reset or new original-game upload is required for an existing v5 library. Start a new in-game match with Crown Authority checked, then visit a town's fort with a hero to issue edicts. See CROWN-AUTHORITY.md.
 
 The GitHub repository builds complete website ZIPs automatically. Pushing source does not itself connect a Pages Direct Upload project to Git deployment; the supplied complete ZIP remains directly uploadable to the existing project.
+
+## GitHub Worker deployment and D1 error 10021
+
+If your build log contains `/workers/scripts/homm3cf/versions`, you are deploying the **Worker**, not using the Pages ZIP uploader. v6.0.1 supports this path directly. Keep the default deploy command `npx wrangler deploy`; the checked-in custom build restores and packages every game asset automatically.
+
+The Worker config declares the **DB** binding without a placeholder ID. Wrangler automatically reuses the existing DB binding on this Worker, or creates `homm3cf-db` on the first deployment. You do not need to paste a database UUID into GitHub. The database tables initialize automatically when the website receives its first API request.
+
+To carry accounts and libraries from a separate Pages project, attach its existing database as **DB** in the Worker's Bindings settings before deployment. Keeping an existing binding preserves its data; creating a first database starts a new account/library store. No database is deleted by this fix.

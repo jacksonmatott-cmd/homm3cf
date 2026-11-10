@@ -29,3 +29,8 @@ town/day and +5 extra per built Capitol/day. Bring a visiting hero to a town
 and click its Fort/Citadel/Castle to issue one of 12 edicts or decrees.
 Keep it enabled for Crown saves. Read CROWN-AUTHORITY.md for details.
 Source and automatic full-build workflow: github.com/jacksonmatott-cmd/homm3cf
+
+GITHUB WORKER FIX v6.0.1: Cloudflare's default npx wrangler deploy now runs
+the complete build and uses automatic DB binding. It reuses this Worker's
+existing DB, or creates a free D1 database for a first deployment.
+The invalid placeholder database ID has been removed.
