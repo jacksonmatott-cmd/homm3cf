@@ -55,3 +55,10 @@ with town/Capitol daily income, twelve paid council edicts/decrees, seven-day
 bonuses and opponent-only hero combat sanctions; optional compatibility for
 Three Realms. Original game graphic references are resolved from the user's
 private installed library. No Ubisoft image files are added to this package.
+
+Changes in v6.1 Full-folder uploads (November 10, 2026): nested game resource
+folders, more supported file formats and larger limits; streaming compression
+and SHA-256 hashing; temporary encrypted browser upload spool; private binary
+D1 storage and per-file metadata. Existing base64 libraries remain readable.
+Browser SHA-256 uses @noble/hashes 1.8.0 (MIT), with the complete license in
+source/noble-hashes-LICENSE.txt. Accounts, saves and engine binaries are retained.

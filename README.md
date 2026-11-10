@@ -1,4 +1,4 @@
-# Heroes III Personal Edition v6.0.1 — Crown Authority
+# Heroes III Personal Edition v6.1.0 — Full-folder uploads and Crown Authority
 
 **Upload HOMM3-Cloudflare-Upload.zip directly to Cloudflare Pages.** This is the finished website with its compiled backend, engine and Three Realms assets. Create an account on the website and upload your owned game folder there. Other computers only need your login; game files download automatically into the browser.
 
@@ -18,7 +18,7 @@ The build pipeline checks a real `wrangler deploy --dry-run`, and packaging reje
 
 ## Accounts and game files
 
-Choose Create an account, enter a username and password, then select your own installed **Heroes III Complete / Shadow of Death** folder on the upload screen. The browser selects supported Data archives, Maps and optional Mp3 music, compresses and encrypts them, and uploads authenticated chunks. The HD Edition is incompatible. Original commercial game content is not included in this ZIP.
+Choose Create an account, enter a username and password, then select your own installed **Heroes III Complete / Shadow of Death** folder on the upload screen. Select the entire installation folder. The browser keeps supported files and subfolders in Data, Maps, Mp3, Sprites, Sounds and config, compresses and encrypts them, and uploads authenticated binary chunks. Maps, campaigns, loose sprites/images, fonts, sound effects and optional music are supported. Windows executables, installers, third-party Windows mod runtimes and cutscene videos are skipped. Nested backup installations are ignored; select one installation if several are found side by side. The HD Edition is incompatible. Original commercial game content is not included in this ZIP.
 
 Each account has its own private library, secure session and save history. Password fields have Show password controls. There is no email recovery: retain your password. The database operator can access stored account libraries; this is private authenticated storage, not end-to-end encryption against the site owner.
 
@@ -50,7 +50,7 @@ Keep the checkbox enabled for saves made with the pack. Original fixed campaigns
 
 ## Free storage
 
-Libraries are limited to **240 MiB compressed**, 1 GiB raw total and 1000 supported files. At most 20 accounts share a **400 MiB encoded storage reservation budget** for game libraries and save snapshots, leaving headroom under Free D1's per-database limit. The application never activates a paid plan. Try omitting optional music or extra maps if the library does not fit. Replacements need room for both old and new libraries until commit; removing stored game files explicitly does not delete cloud saves.
+Libraries accept up to **10,000 supported files**, **400 MiB compressed**, **8 GiB raw total** and **2 GiB per file**. Compression, hashing and encryption stream through bounded buffers; temporary encrypted upload data is stored on the device and removed after the upload. New libraries use binary BLOB storage instead of base64, avoiding its roughly one-third size overhead. Metadata is split by file to stay within D1 row limits. Existing base64 libraries still download normally. At most 20 accounts share a **440 MiB storage reservation budget** for libraries, metadata and save snapshots, leaving headroom under Free D1's per-database limit. The application never activates a paid plan. Try omitting optional music or extra maps if the library does not fit. Replacements need room for both old and new libraries until commit; removing stored game files explicitly does not delete cloud saves.
 
 Snapshots are limited to 32 MiB compressed, split into 128 KiB parts, with five completed snapshots retained. Local portable backups allow 128 MiB raw / 192 MiB serialized / 5000 files. Provider daily quotas apply. The deployment ZIP meets the Pages dashboard limits of 1000 files and 25 MiB per asset.
 
@@ -58,6 +58,6 @@ Snapshots are limited to 32 MiB compressed, split into 128 KiB parts, with five 
 
 The downloadable website includes corresponding source archives and licenses through **Credits & source**. `HOMM3-Cloudflare-Personal.zip` is the separate full developer project; use the **Upload** ZIP for dashboard deployment. Developer commands: `npm ci`, `npm test`, `npm run build`, `npm run verify`, `npm run package`. Node.js 22.13+ / 24 LTS and Python are developer tools only. Older account/setup scripts remain in the source for compatibility tests; the v5 website workflow does not use them.
 
-Automated tests cover registration/login, secure-cookie sessions, account/file/save isolation, upload validation, encrypted compressed file round trips, incomplete transfers, storage reservations, replacement conflicts, browser cache isolation, portable backups, town installation, engine hashes and ZIP structure. Backend tests use real SQLite with a D1-compatible adapter and synthetic original-game fixtures. Live Cloudflare deployment, a real commercial library and full gameplay were not tested here.
+Automated tests cover registration/login, secure-cookie sessions, account/file/save isolation, upload validation, encrypted compressed file round trips, incomplete transfers, storage reservations, replacement conflicts, browser cache isolation, portable backups, town installation, engine hashes and ZIP structure. Backend tests use real SQLite with a D1-compatible adapter and synthetic original-game fixtures. The deployment pipeline is checked separately on GitHub and Cloudflare. A real commercial library and full gameplay were not tested here; the supplied Windows game folder is not accessible from this workspace.
 
 The browser runtime is unchanged from [homm3-browser v0.1.0](https://github.com/mihaicristianfarcas/homm3-browser/tree/v0.1.0), using VCMI 1.7.5. Engine and launcher code: GPL-2.0-or-later. Town art/adaptations: CC-BY-SA 4.0 with author credits. @noble/hashes 1.8.0: MIT, license included. Heroes of Might and Magic is a Ubisoft trademark; this project is unaffiliated with Ubisoft.

@@ -21,7 +21,7 @@ If you delete and recreate the Pages project, attach that same D1 database as **
 
 ## Free limits
 
-The application allows at most **240 MiB of compressed game files per library**, 1 GiB raw total, 300 MiB per original file and 1000 selected supported files. Account libraries and saves together reserve at most **400 MiB of encoded stored data** to leave headroom in the Free D1 database. Up to 20 accounts share that allowance; it is intended for a personal site. No paid upgrade is triggered by the application.
+The application allows at most **400 MiB of compressed game files per library**, 8 GiB raw total, 2 GiB per original file and 10,000 selected supported files (including subfolders). Account libraries and saves together reserve at most **440 MiB of reserved stored data** to leave headroom in the Free D1 database. Up to 20 accounts share that allowance; it is intended for a personal site. New uploads use compact binary storage and per-file metadata; previous libraries remain readable. Select your entire installation folder: supported Data, Maps, Mp3, Sprites, Sounds and config contents are included. Windows programs and cutscene videos are skipped. No paid upgrade is triggered by the application.
 
 Try excluding optional music or extra maps if a library is too large. Replacing an existing library keeps the old copy until the new one is complete, so it temporarily needs room for both. If necessary, explicitly remove your stored game files in **Manage game files**, then upload again; cloud saves remain intact. A failed or interrupted upload does not publish an incomplete library. Interrupted uploads must be restarted and expire after two hours without new uploaded parts.
 
@@ -39,7 +39,7 @@ The GitHub repository builds complete website ZIPs automatically. Pushing source
 
 ## GitHub Worker deployment and D1 error 10021
 
-If your build log contains `/workers/scripts/homm3cf/versions`, you are deploying the **Worker**, not using the Pages ZIP uploader. v6.0.1 supports this path directly. Keep the default deploy command `npx wrangler deploy`; the checked-in custom build restores and packages every game asset automatically.
+If your build log contains `/workers/scripts/homm3cf/versions`, you are deploying the **Worker**, not using the Pages ZIP uploader. v6.1.0 supports this path directly. Keep the default deploy command `npx wrangler deploy`; the checked-in custom build restores and packages every game asset automatically.
 
 The Worker config declares the **DB** binding without a placeholder ID. Wrangler automatically reuses the existing DB binding on this Worker, or creates `homm3cf-db` on the first deployment. You do not need to paste a database UUID into GitHub. The database tables initialize automatically when the website receives its first API request.
 

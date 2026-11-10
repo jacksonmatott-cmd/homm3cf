@@ -1,6 +1,7 @@
 import {libraryAAD,base64ToBytes} from './library-format.js';
+import {hashFile} from './file-hash.js';
+import {validGamePath,GAME_FOLDERS,MAX_GAME_FILES,MAX_GAME_FILE_BYTES,MAX_GAME_RAW_BYTES,MAX_LIBRARY_BYTES} from './library-plan.js';
 // Browser storage/download worker. GPL-2.0-or-later
-const ALLOWED=/^(Data|Maps|Mp3)\/[^/\\\x00-\x1f]+$/;
 const STATE='.cloud-files.json';
 async function dirFor(root,parts) {let dir=root;for(const part of parts)dir=await dir.getDirectoryHandle(part,{create:true});return dir;}
 async function openWriter(file) {
@@ -24,7 +25,7 @@ async function importFiles(files) {
   const root=await dirFor(await navigator.storage.getDirectory(),['h3']);
   const total=files.reduce((n,e)=>n+e.file.size,0);let copied=0;
   for(let index=0;index<files.length;index++) {
-    const {dest,file}=files[index];if(!ALLOWED.test(dest)||dest.includes('/..'))throw new Error('Invalid game filename.');
+    const {dest,file}=files[index];if(!validGamePath(dest))throw new Error('Invalid game filename.');
     const result=await writeFile(root,dest,file.stream(),bytes=>{copied+=bytes;postMessage({type:'progress',copied,total,file:dest,index,count:files.length});});
     if(result.size!==file.size)throw new Error(`Incomplete copy: ${dest}.`);
   }
@@ -33,11 +34,14 @@ async function importFiles(files) {
 async function downloadFiles(files,keyText,version,accountId) {
   if(!/^[a-f0-9-]{36}$/.test(version))throw new Error('Invalid encrypted library version.');
   const key=await crypto.subtle.importKey('raw',base64ToBytes(keyText),{name:'AES-GCM'},false,['decrypt']);
+  if(!Array.isArray(files)||!files.length||files.length>MAX_GAME_FILES||files.reduce((n,f)=>n+f.size,0)>MAX_GAME_RAW_BYTES)throw new Error('The game library is too large.');
+  const names=new Set();
   for(const entry of files) {
-    if(!ALLOWED.test(entry.path)||entry.path.includes('/..')||!Number.isSafeInteger(entry.size)||entry.size<=0||entry.size>300*1024*1024||!/^[a-f0-9]{64}$/.test(entry.sha256))throw new Error('The server game manifest is invalid.');
+    if(!validGamePath(entry.path)||names.has(entry.path.toLowerCase())||!Number.isSafeInteger(entry.size)||entry.size<0||entry.size>MAX_GAME_FILE_BYTES||!/^[a-f0-9]{64}$/.test(entry.sha256))throw new Error('The server game manifest is invalid.');
+    names.add(entry.path.toLowerCase());
     if(entry.encoding!==undefined&&entry.encoding!=='gzip')throw new Error('Unsupported game file encoding.');
     const encodedSize=entry.encoding==='gzip'?entry.encodedSize:entry.size;
-    if(!Number.isSafeInteger(encodedSize)||encodedSize<1||encodedSize>300*1024*1024||!Array.isArray(entry.chunks)||!entry.chunks.length||entry.chunks.reduce((n,c)=>n+c.size,0)!==encodedSize)throw new Error('The encrypted library manifest is invalid.');
+    if(!Number.isSafeInteger(encodedSize)||encodedSize<0||encodedSize>MAX_LIBRARY_BYTES||!Array.isArray(entry.chunks)||!entry.chunks.length||entry.chunks.reduce((n,c)=>n+c.size,0)!==encodedSize)throw new Error('The encrypted library manifest is invalid.');
     for(const chunk of entry.chunks){const url=new URL(chunk.url,location.href);if(url.origin!==location.origin||(!url.pathname.startsWith('/game-data/'+version+'/')&&!url.pathname.startsWith('/api/game-library/chunks/'+version+'/'))||!Number.isInteger(chunk.size)||chunk.size<1||chunk.size>8*1024*1024||chunk.cipherSize!==chunk.size+16||base64ToBytes(chunk.iv).length!==12)throw new Error('Invalid encrypted game chunk.');}
   }
   const root=await dirFor(await navigator.storage.getDirectory(),['h3']);
@@ -46,7 +50,7 @@ async function downloadFiles(files,keyText,version,accountId) {
   const total=files.reduce((n,file)=>n+file.size,0),queue=[];
   for(const file of files) {
     let present=false;
-    if(state[file.path]?.sha256===file.sha256&&state[file.path]?.size===file.size){try{const parts=file.path.split('/');const dir=await root.getDirectoryHandle(parts[0]);present=(await(await dir.getFileHandle(parts[1])).getFile()).size===file.size;}catch{}}
+    if(state[file.path]?.sha256===file.sha256&&state[file.path]?.size===file.size){try{const parts=file.path.split('/'),name=parts.pop();let dir=root;for(const part of parts)dir=await dir.getDirectoryHandle(part);present=(await(await dir.getFileHandle(name)).getFile()).size===file.size;}catch{}}
     if(present)copied+=file.size;else queue.push(file);
   }
   const report=(file='')=>{postMessage({type:'progress',copied,total,file});lastReport=performance.now();};report();
@@ -74,9 +78,7 @@ async function downloadFiles(files,keyText,version,accountId) {
         const decoded=entry.encoding==='gzip'?stream.pipeThrough(new DecompressionStream('gzip')):stream;
         const result=await writeFile(root,entry.path,decoded,bytes=>{copied+=bytes;keepAlive();if(performance.now()-lastReport>120)report(entry.path);},entry.size);
         if(result.size!==entry.size)throw new Error(`Incomplete download of ${entry.path}. Retry to finish your library.`);
-        const bytes=new Uint8Array(await(await result.file.getFile()).arrayBuffer());
-        const digest=new Uint8Array(await crypto.subtle.digest('SHA-256',bytes));
-        const hash=Array.from(digest,b=>b.toString(16).padStart(2,'0')).join('');
+        const hash=await hashFile(await result.file.getFile());
         if(hash!==entry.sha256)throw new Error(`The checksum of ${entry.path} did not match. Retry the download.`);
         state[entry.path]={size:entry.size,sha256:entry.sha256};
         writes=writes.then(()=>writeFile(root,STATE,new Blob([JSON.stringify(state)]).stream()));await writes;
@@ -88,10 +90,8 @@ async function downloadFiles(files,keyText,version,accountId) {
   if(failure)throw failure;
   // Discard obsolete cached game assets only after the whole replacement library is intact.
   const wanted=new Set(files.map(file=>file.path.toLowerCase()));
-  for(const name of ['Data','Maps','Mp3']) {
-    let dir;try{dir=await root.getDirectoryHandle(name);}catch{continue;}
-    for await(const [filename,handle]of dir.entries())if(handle.kind==='file'&&!wanted.has(`${name}/${filename}`.toLowerCase()))await dir.removeEntry(filename);
-  }
+  async function trim(dir,prefix){for await(const [name,handle]of dir.entries()){const path=prefix+'/'+name;if(handle.kind==='directory')await trim(handle,path);else if(!wanted.has(path.toLowerCase()))await dir.removeEntry(name);}}
+  for(const name of Object.values(GAME_FOLDERS)){let dir;try{dir=await root.getDirectoryHandle(name);}catch{continue;}await trim(dir,name);}
   copied=total;report();
 }
 onmessage=async({data})=>{
