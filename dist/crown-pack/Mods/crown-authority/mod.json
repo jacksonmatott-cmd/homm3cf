@@ -1,0 +1,19 @@
+{
+  "name": "Crown Authority",
+  "description": "Empire politics for Heroes III: automatic daily Authority income, a Royal Council in every fort, and twelve paid edicts and decrees. Uses your original installed town graphics.",
+  "version": "1.0.0",
+  "author": "ArcLink Studios / Jackson Matott",
+  "modType": "Mechanics",
+  "licenseName": "GPL-2.0-or-later",
+  "licenseURL": "https://www.gnu.org/licenses/old-licenses/gpl-2.0.html",
+  "compatibility": {
+    "min": "1.7.5",
+    "max": "1.7.99"
+  },
+  "resources": [
+    "config/crown-authority/resource.json"
+  ],
+  "factions": [
+    "config/crown-authority/core-towns.json"
+  ]
+}

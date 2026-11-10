@@ -1,0 +1,19 @@
+node_modules/
+.wrangler/
+.local/
+.dev.vars
+.env*
+game-files/
+
+# Generated PERSONAL uploads contain private backend configuration.
+UPLOAD-TO-CLOUDFLARE*
+
+# Large open-source assets are reproduced from pinned upstream releases by npm run hydrate.
+dist/vcmiclient.js
+dist/vcmiclient.wasm
+dist/vcmiclient.data
+dist/town-pack/
+dist/source/*.tar.gz
+dist/source/personal-launcher-source.zip
+dist/_worker.js
+*.zip

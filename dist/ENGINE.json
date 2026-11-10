@@ -1,0 +1,24 @@
+{
+  "engine": "VCMI 1.7.5",
+  "browser_port": "homm3-browser v0.1.0",
+  "release_url": "https://github.com/mihaicristianfarcas/homm3-browser/releases/tag/v0.1.0",
+  "source_url": "https://github.com/mihaicristianfarcas/homm3-browser/tree/v0.1.0",
+  "runtime_binaries_modified": false,
+  "runtime_files": [
+    {
+      "name": "vcmiclient.js",
+      "size_bytes": 240909,
+      "sha256": "8361f4d6c49e1fcd49fef1f053f2508561c1abeb8acacfff6e5bcb85635da10e"
+    },
+    {
+      "name": "vcmiclient.wasm",
+      "size_bytes": 21366506,
+      "sha256": "2c328d97af4105a840aac13524ae0706e8c7a98d6fbaa24121b713a2e130e5f3"
+    },
+    {
+      "name": "vcmiclient.data",
+      "size_bytes": 8705183,
+      "sha256": "60b67e978c9e03a9949c308f9d7177bc4cbd96d3ff284fd93fd5816817e14a87"
+    }
+  ]
+}

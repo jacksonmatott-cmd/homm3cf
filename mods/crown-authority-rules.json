@@ -1,0 +1,19 @@
+{
+  "id": "crown-authority", "version": "1.0.0", "engine": "1.7.5",
+  "resource": "crown-authority:authority", "townIncome": 3, "capitalExtraIncome": 5,
+  "councilBuilding": "fort", "sessionPeriodDays": 7,
+  "edicts": [
+    {"id":"royalLevy","name":"Royal Levy","category":"Decree","cost":12,"summary":"Collect 2500 gold immediately.","resources":{"gold":2500}},
+    {"id":"supplyWrit","name":"Supply Writ","category":"Decree","cost":12,"summary":"Collect 8 wood and 8 ore immediately.","resources":{"wood":8,"ore":8}},
+    {"id":"royalMarch","name":"Royal Roads Edict","category":"Edict","cost":18,"summary":"All your heroes gain +300 land movement each new day for 7 days.","playerBonuses":[{"type":"MOVEMENT","subtype":"heroMovementLand","val":300}]},
+    {"id":"royalValor","name":"Banner of Unity","category":"Edict","cost":15,"summary":"Your kingdom gains +1 morale for 7 days. Normal morale immunity and caps apply.","playerBonuses":[{"type":"MORALE","val":1}]},
+    {"id":"royalFortune","name":"Festival Decree","category":"Edict","cost":15,"summary":"Your kingdom gains +1 luck for 7 days. Normal luck caps apply.","playerBonuses":[{"type":"LUCK","val":1}]},
+    {"id":"steelWrit","name":"Writ of Steel","category":"Edict","cost":20,"summary":"Your kingdom gains +1 Attack and +1 Defense for 7 days.","playerBonuses":[{"type":"PRIMARY_SKILL","subtype":"attack","val":1},{"type":"PRIMARY_SKILL","subtype":"defence","val":1}]},
+    {"id":"arcaneCouncil","name":"Arcane Council","category":"Edict","cost":20,"summary":"Your kingdom gains +1 Spell Power and +1 Knowledge for 7 days.","playerBonuses":[{"type":"PRIMARY_SKILL","subtype":"spellpower","val":1},{"type":"PRIMARY_SKILL","subtype":"knowledge","val":1}]},
+    {"id":"royalRelief","name":"Royal Relief","category":"Decree","cost":8,"summary":"Restore up to 30 spell points to the visiting hero, up to their normal maximum.","manaPoints":30},
+    {"id":"dreadProclamation","name":"Dread Proclamation","category":"Hostile decree","cost":20,"summary":"For 7 days, enemies fighting THIS visiting hero suffer -1 morale. Morale-immune enemies are unaffected.","bonuses":[{"type":"MORALE","val":-1,"enemy":true}]},
+    {"id":"whisperCampaign","name":"War of Whispers","category":"Hostile decree","cost":20,"summary":"For 7 days, enemies fighting THIS visiting hero suffer -1 luck, subject to VCMI luck rules.","bonuses":[{"type":"LUCK","val":-1,"enemy":true}]},
+    {"id":"weaponsEmbargo","name":"Weapons Embargo","category":"Hostile decree","cost":24,"summary":"For 7 days, enemy troops fighting THIS visiting hero suffer -2 Attack.","bonuses":[{"type":"PRIMARY_SKILL","subtype":"attack","val":-2,"enemy":true}]},
+    {"id":"siegeSanction","name":"Shatter Shields Sanction","category":"Hostile decree","cost":24,"summary":"For 7 days, enemy troops fighting THIS visiting hero suffer -2 Defense.","bonuses":[{"type":"PRIMARY_SKILL","subtype":"defence","val":-2,"enemy":true}]}
+  ]
+}

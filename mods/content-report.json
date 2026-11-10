@@ -1,0 +1,660 @@
+{
+  "version": "abe1bd72ac2d7d5fc231242b79a9654af2b4670f192e8f9aa4b8b64ce668b054",
+  "towns": [
+    {
+      "id": "grove",
+      "name": "Grove",
+      "role": "Small maps",
+      "heroes": 20,
+      "addedHeroes": [
+        {
+          "id": "threeRealmsgrove0",
+          "name": "Rowan Vale",
+          "class": "hunter",
+          "specialty": {
+            "description": "Summons some Treebeards at the beginning of the battle.",
+            "tooltip": "Creature bonus: Treebeards",
+            "name": "Treebeards"
+          }
+        },
+        {
+          "id": "threeRealmsgrove1",
+          "name": "Mira Thorn",
+          "class": "hunter",
+          "specialty": {
+            "description": "Increases the Attack and Defense skills of any Night Druids or Elder Druids she commands for each level attainded after 4th level.",
+            "tooltip": "Specialty bonus: Night Druids",
+            "name": "Night Druids"
+          }
+        },
+        {
+          "id": "threeRealmsgrove2",
+          "name": "Edrin Moss",
+          "class": "hunter",
+          "specialty": {
+            "description": "Start with Night Falcon and Ammo Cart.",
+            "tooltip": "?",
+            "name": "Engineer"
+          }
+        }
+      ],
+      "creatures": 15,
+      "roster": [
+        {
+          "id": "faun",
+          "name": "Faun",
+          "level": 1,
+          "cost": {
+            "gold": 45
+          },
+          "growth": 16,
+          "hitPoints": 10,
+          "attack": 2,
+          "defense": 6
+        },
+        {
+          "id": "armedfaun",
+          "name": "Armed Faun",
+          "level": 1,
+          "cost": {
+            "gold": 55
+          },
+          "growth": 16,
+          "hitPoints": 10,
+          "attack": 3,
+          "defense": 7
+        },
+        {
+          "id": "moonhunter",
+          "name": "Moon Hunter",
+          "level": 2,
+          "cost": {
+            "gold": 90
+          },
+          "growth": 11,
+          "hitPoints": 15,
+          "attack": 7,
+          "defense": 4
+        },
+        {
+          "id": "moonslayer",
+          "name": "Moon Slayer",
+          "level": 2,
+          "cost": {
+            "gold": 120
+          },
+          "growth": 11,
+          "hitPoints": 15,
+          "attack": 8,
+          "defense": 5
+        },
+        {
+          "id": "groveguard",
+          "name": "Grove Guard",
+          "level": 3,
+          "cost": {
+            "gold": 180
+          },
+          "growth": 9,
+          "hitPoints": 16,
+          "attack": 7,
+          "defense": 6
+        },
+        {
+          "id": "grovekeeper",
+          "name": "Grove Keeper",
+          "level": 3,
+          "cost": {
+            "gold": 225
+          },
+          "growth": 9,
+          "hitPoints": 22,
+          "attack": 8,
+          "defense": 8
+        },
+        {
+          "id": "nightdruid",
+          "name": "Night Druid",
+          "level": 4,
+          "cost": {
+            "gold": 340
+          },
+          "growth": 6,
+          "hitPoints": 25,
+          "attack": 10,
+          "defense": 10
+        },
+        {
+          "id": "elderdruid",
+          "name": "Elder Druid",
+          "level": 4,
+          "cost": {
+            "gold": 450
+          },
+          "growth": 6,
+          "hitPoints": 35,
+          "attack": 11,
+          "defense": 11
+        },
+        {
+          "id": "basiliskrider",
+          "name": "Basilisk Rider",
+          "level": 5,
+          "cost": {
+            "gold": 500
+          },
+          "growth": 3,
+          "hitPoints": 60,
+          "attack": 9,
+          "defense": 15
+        },
+        {
+          "id": "basiliskchampion",
+          "name": "Basilisk Champion",
+          "level": 5,
+          "cost": {
+            "gold": 600
+          },
+          "growth": 3,
+          "hitPoints": 70,
+          "attack": 10,
+          "defense": 17
+        },
+        {
+          "id": "spiderprincess",
+          "name": "Spider Princess",
+          "level": 6,
+          "cost": {
+            "gold": 792
+          },
+          "growth": 2,
+          "hitPoints": 59,
+          "attack": 13,
+          "defense": 15
+        },
+        {
+          "id": "spiderqueen",
+          "name": "Spider Queen",
+          "level": 6,
+          "cost": {
+            "gold": 902
+          },
+          "growth": 2,
+          "hitPoints": 59,
+          "attack": 13,
+          "defense": 16
+        },
+        {
+          "id": "quartzdragon",
+          "name": "Quartz Dragon",
+          "level": 7,
+          "cost": {
+            "gold": 2750,
+            "crystal": 1
+          },
+          "growth": 1,
+          "hitPoints": 203,
+          "attack": 16,
+          "defense": 19
+        },
+        {
+          "id": "amethystdragon",
+          "name": "Amethyst Dragon",
+          "level": 7,
+          "cost": {
+            "gold": 3850,
+            "crystal": 2
+          },
+          "growth": 1,
+          "hitPoints": 266,
+          "attack": 19,
+          "defense": 25
+        },
+        {
+          "id": "saphiredragon",
+          "name": "Saphire Dragon",
+          "level": 7,
+          "cost": {
+            "gold": 7700,
+            "crystal": 3
+          },
+          "growth": 1,
+          "hitPoints": 513,
+          "attack": 22,
+          "defense": 35
+        }
+      ],
+      "source": "https://github.com/vcmi-mods/grove.git",
+      "commit": "abd472fbc949c2592ea0e42aa067dc970a6d0a83"
+    },
+    {
+      "id": "new-pavilion",
+      "name": "Pavilion",
+      "role": "Medium to large maps",
+      "heroes": 21,
+      "addedHeroes": [
+        {
+          "id": "threeRealmspavilion0",
+          "name": "Samira Dawn",
+          "class": "embalmer",
+          "specialty": {
+            "description": "Receives a 5% per level bonus to sorcery skill percentage.",
+            "tooltip": "Secondary Skill Bonus: Sorcery",
+            "name": "Sorcery"
+          }
+        },
+        {
+          "id": "threeRealmspavilion1",
+          "name": "Tarek of the Dunes",
+          "class": "vizier",
+          "specialty": {
+            "description": "Increases the speed of Sphinxes or Sphinx Oracles by 1 and their Attack and Defense skills by 5% for every 6 levels (rounded up).",
+            "tooltip": "Creature Bonus: Sphinxes",
+            "name": "Sphinxes"
+          }
+        },
+        {
+          "id": "threeRealmspavilion2",
+          "name": "Neset Sunward",
+          "class": "vizier",
+          "specialty": {
+            "description": "Increases the speed of Wadjets or Venomous Wadjets by 1 and their Attack and Defense skills by 5% for every 2 levels (rounded up).",
+            "tooltip": "Creature Bonus: Wadjets",
+            "name": "Wadjets"
+          }
+        }
+      ],
+      "creatures": 14,
+      "roster": [
+        {
+          "id": "whipper",
+          "name": "Whipper",
+          "level": 1,
+          "cost": {
+            "gold": 50
+          },
+          "growth": 15,
+          "hitPoints": 7,
+          "attack": 4,
+          "defense": 3
+        },
+        {
+          "id": "overseer",
+          "name": "Overseer",
+          "level": 1,
+          "cost": {
+            "gold": 60
+          },
+          "growth": 15,
+          "hitPoints": 7,
+          "attack": 5,
+          "defense": 5
+        },
+        {
+          "id": "wadjet",
+          "name": "Wadjet",
+          "level": 2,
+          "cost": {
+            "gold": 130
+          },
+          "growth": 9,
+          "hitPoints": 15,
+          "attack": 7,
+          "defense": 4
+        },
+        {
+          "id": "venomousWadjet",
+          "name": "Venomous Wadjet",
+          "level": 2,
+          "cost": {
+            "gold": 180
+          },
+          "growth": 9,
+          "hitPoints": 20,
+          "attack": 7,
+          "defense": 5
+        },
+        {
+          "id": "camelRider",
+          "name": "Camel Rider",
+          "level": 3,
+          "cost": {
+            "gold": 220
+          },
+          "growth": 8,
+          "hitPoints": 27,
+          "attack": 9,
+          "defense": 9
+        },
+        {
+          "id": "desertWarrior",
+          "name": "Desert Warrior",
+          "level": 3,
+          "cost": {
+            "gold": 260
+          },
+          "growth": 8,
+          "hitPoints": 27,
+          "attack": 10,
+          "defense": 10
+        },
+        {
+          "id": "sekhmet",
+          "name": "Priestess",
+          "level": 4,
+          "cost": {
+            "gold": 330
+          },
+          "growth": 5,
+          "hitPoints": 27,
+          "attack": 10,
+          "defense": 8
+        },
+        {
+          "id": "sekhmetPriestess",
+          "name": "High Priestess",
+          "level": 4,
+          "cost": {
+            "gold": 380
+          },
+          "growth": 5,
+          "hitPoints": 32,
+          "attack": 12,
+          "defense": 9
+        },
+        {
+          "id": "ammut",
+          "name": "Ammut",
+          "level": 5,
+          "cost": {
+            "gold": 500
+          },
+          "growth": 4,
+          "hitPoints": 54,
+          "attack": 14,
+          "defense": 12
+        },
+        {
+          "id": "sunAmmut",
+          "name": "Devouring Ammut",
+          "level": 5,
+          "cost": {
+            "gold": 600
+          },
+          "growth": 4,
+          "hitPoints": 54,
+          "attack": 14,
+          "defense": 14
+        },
+        {
+          "id": "sphinx",
+          "name": "Sphinx",
+          "level": 6,
+          "cost": {
+            "gold": 900
+          },
+          "growth": 2,
+          "hitPoints": 100,
+          "attack": 14,
+          "defense": 16
+        },
+        {
+          "id": "elderSphinx",
+          "name": "Sphinx Oracle",
+          "level": 6,
+          "cost": {
+            "gold": 1100
+          },
+          "growth": 2,
+          "hitPoints": 110,
+          "attack": 15,
+          "defense": 17
+        },
+        {
+          "id": "anubis",
+          "name": "Anubian",
+          "level": 7,
+          "cost": {
+            "gold": 2000,
+            "mercury": 1
+          },
+          "growth": 1,
+          "hitPoints": 180,
+          "attack": 20,
+          "defense": 15
+        },
+        {
+          "id": "anubisWarrior",
+          "name": "Divine Anubian",
+          "level": 7,
+          "cost": {
+            "gold": 4000,
+            "mercury": 2
+          },
+          "growth": 1,
+          "hitPoints": 250,
+          "attack": 30,
+          "defense": 20
+        }
+      ],
+      "source": "https://github.com/vcmi-mods/new-pavilion.git",
+      "commit": "ac2ca887db4446796a6a0e251bf3d0de2148ee76"
+    },
+    {
+      "id": "cathedral-town",
+      "name": "Cathedral",
+      "role": "Large maps and long campaigns",
+      "heroes": 19,
+      "addedHeroes": [
+        {
+          "id": "threeRealmscathedral0",
+          "name": "Severin Ash",
+          "class": "redtemplar",
+          "specialty": {
+            "description": "Receives a 5% per level bonus to Offence skill.",
+            "tooltip": "Secondary Skill Bonus : Offence",
+            "name": "Offence"
+          }
+        },
+        {
+          "id": "threeRealmscathedral1",
+          "name": "Helia Voss",
+          "class": "redtemplar",
+          "specialty": {
+            "description": "Increases Speed of any Templars and Dark Templars by 1 and their Attack and Defense skills by 5% for every 6 levels (rounded up).",
+            "tooltip": "Creature Bonus: Templars",
+            "name": "Templars"
+          }
+        },
+        {
+          "id": "threeRealmscathedral2",
+          "name": "Brother Ordan",
+          "class": "redtemplar",
+          "specialty": {
+            "description": "Increases kingdom's income by 350 gold per day.",
+            "tooltip": "Resource Bonus: Gold",
+            "name": "+350 Gold"
+          }
+        }
+      ],
+      "creatures": 14,
+      "roster": [
+        {
+          "id": "cthAttackDog",
+          "name": "Sleuthhound",
+          "level": 1,
+          "cost": {
+            "gold": 50
+          },
+          "growth": 16,
+          "hitPoints": 8,
+          "attack": 3,
+          "defense": 3
+        },
+        {
+          "id": "cthHound",
+          "name": "Patrol",
+          "level": 1,
+          "cost": {
+            "gold": 65
+          },
+          "growth": 16,
+          "hitPoints": 10,
+          "attack": 4,
+          "defense": 4
+        },
+        {
+          "id": "cthSlayer",
+          "name": "Slayer",
+          "level": 2,
+          "cost": {
+            "gold": 110
+          },
+          "growth": 8,
+          "hitPoints": 15,
+          "attack": 5,
+          "defense": 5
+        },
+        {
+          "id": "cthExecutioner",
+          "name": "Executioner",
+          "level": 2,
+          "cost": {
+            "gold": 140
+          },
+          "growth": 8,
+          "hitPoints": 20,
+          "attack": 6,
+          "defense": 6
+        },
+        {
+          "id": "cthWitchHunter",
+          "name": "Witch Hunter",
+          "level": 3,
+          "cost": {
+            "gold": 180
+          },
+          "growth": 7,
+          "hitPoints": 15,
+          "attack": 7,
+          "defense": 7
+        },
+        {
+          "id": "cthEvilHunter",
+          "name": "Evil Hunter",
+          "level": 3,
+          "cost": {
+            "gold": 220
+          },
+          "growth": 7,
+          "hitPoints": 20,
+          "attack": 9,
+          "defense": 7
+        },
+        {
+          "id": "cthCouatl",
+          "name": "Gourmand",
+          "level": 4,
+          "cost": {
+            "gold": 400
+          },
+          "growth": 4,
+          "hitPoints": 45,
+          "attack": 10,
+          "defense": 12
+        },
+        {
+          "id": "cthBloodyCouatl",
+          "name": "Glutton",
+          "level": 4,
+          "cost": {
+            "gold": 450
+          },
+          "growth": 4,
+          "hitPoints": 45,
+          "attack": 12,
+          "defense": 12
+        },
+        {
+          "id": "cthSexton",
+          "name": "Sexton",
+          "level": 5,
+          "cost": {
+            "gold": 425
+          },
+          "growth": 3,
+          "hitPoints": 40,
+          "attack": 10,
+          "defense": 10
+        },
+        {
+          "id": "cthCantor",
+          "name": "Cantor",
+          "level": 5,
+          "cost": {
+            "gold": 600
+          },
+          "growth": 3,
+          "hitPoints": 40,
+          "attack": 12,
+          "defense": 10
+        },
+        {
+          "id": "cthTemplar",
+          "name": "Templar",
+          "level": 6,
+          "cost": {
+            "gold": 1215
+          },
+          "growth": 2,
+          "hitPoints": 88,
+          "attack": 19,
+          "defense": 22
+        },
+        {
+          "id": "cthPaladin",
+          "name": "Dark Templar",
+          "level": 6,
+          "cost": {
+            "gold": 1485
+          },
+          "growth": 2,
+          "hitPoints": 100,
+          "attack": 21,
+          "defense": 24
+        },
+        {
+          "id": "cthPunisher",
+          "name": "Punisher",
+          "level": 7,
+          "cost": {
+            "gold": 3780,
+            "sulfur": 1
+          },
+          "growth": 1,
+          "hitPoints": 188,
+          "attack": 23,
+          "defense": 17
+        },
+        {
+          "id": "cthChasteners",
+          "name": "Chastener",
+          "level": 7,
+          "cost": {
+            "gold": 6480,
+            "sulfur": 3
+          },
+          "growth": 1,
+          "hitPoints": 250,
+          "attack": 33,
+          "defense": 22
+        }
+      ],
+      "source": "https://github.com/vcmi-mods/cathedral-town.git",
+      "commit": "0c298006c7b43bb3fef3407290934b5419d145d0"
+    }
+  ],
+  "fileCount": 1957,
+  "totalSize": 181541814,
+  "downloadSize": 83777695
+}

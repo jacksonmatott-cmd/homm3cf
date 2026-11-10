@@ -1,0 +1,31 @@
+HOMM3 PERSONAL EDITION v6 — UPLOAD THIS SITE ZIP DIRECTLY
+
+HOMM3-Cloudflare-Upload.zip IS THE FINISHED CLOUDFLARE PAGES UPLOAD.
+No preparation scripts, Node.js, npm, Github or local build are needed.
+
+1. Upload HOMM3-Cloudflare-Upload.zip using Cloudflare Pages > Direct Upload.
+2. Create a free D1 database. In your Pages project's Settings > Bindings,
+   add a D1 binding named DB. Redeploy this same ZIP to apply the binding.
+3. Open the website and click Create an account.
+4. After creating your account, upload your own installed Heroes III
+   Complete / Shadow of Death folder ON THE WEBSITE.
+5. On another computer: open the same website and sign in. Your game
+   files download into the browser automatically.
+
+No R2 or paid subscription is used. One free D1 database is required.
+Game libraries must fit the free limits. Try without optional music if needed.
+The original commercial HOMM3 game files are not included in this ZIP.
+
+Save in game, return & sync, and wait for Synced to cloud before changing PCs.
+Three Realms: enable the checkbox before playing to add the three towns.
+
+All future releases will be full directly uploadable website ZIPs.
+Keep the SAME D1 database to retain accounts, game files and cloud saves.
+You can update the existing Pages site; deleting it is not required.
+Read CLOUDFLARE-UPLOAD.md for dashboard steps and older-version migration.
+
+NEW IN v6: Check Crown Authority before a NEW game. Earn +3 Authority per
+town/day and +5 extra per built Capitol/day. Bring a visiting hero to a town
+and click its Fort/Citadel/Castle to issue one of 12 edicts or decrees.
+Keep it enabled for Crown saves. Read CROWN-AUTHORITY.md for details.
+Source and automatic full-build workflow: github.com/jacksonmatott-cmd/homm3cf

@@ -1,0 +1,11 @@
+{
+  "version": "1.0.0",
+  "engine": "1.7.5",
+  "license": "CC-BY-SA-4.0",
+  "licenseURL": "https://creativecommons.org/licenses/by-sa/4.0/",
+  "towns": [
+    {"id":"grove","faction":"grove","checkout":"grove","subdirectory":"Grove","repository":"https://github.com/vcmi-mods/grove.git","commit":"abd472fbc949c2592ea0e42aa067dc970a6d0a83","author":"New Grove Team & Trith; Kuririn & Pointer; avatar; Alyx182008","name":"Grove","role":"Small maps","heroes":["Rowan Vale","Mira Thorn","Edrin Moss"]},
+    {"id":"new-pavilion","faction":"pavilion","checkout":"pavilion","subdirectory":".","repository":"https://github.com/vcmi-mods/new-pavilion.git","commit":"ac2ca887db4446796a6a0e251bf3d0de2148ee76","author":"Bastion New Town Group; edeksumo; New Pawulon Team; Acid Cave and VCMI communities","name":"Pavilion","role":"Medium to large maps","heroes":["Samira Dawn","Tarek of the Dunes","Neset Sunward"]},
+    {"id":"cathedral-town","faction":"cathedral","checkout":"cathedral","subdirectory":".","repository":"https://github.com/vcmi-mods/cathedral-town.git","commit":"0c298006c7b43bb3fef3407290934b5419d145d0","author":"Ben Yan; VCMI community contributors","name":"Cathedral","role":"Large maps and long campaigns","heroes":["Severin Ash","Helia Voss","Brother Ordan"]}
+  ]
+}

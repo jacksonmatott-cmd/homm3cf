@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "include": [
+    "/api/*",
+    "/_worker.js",
+    "/_worker.js/*",
+    "/_worker.js.map"
+  ],
+  "exclude": []
+}

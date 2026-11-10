@@ -1,0 +1,328 @@
+{
+  "new-pavilion:pavilion": {
+    "town": {
+      "buildings": {
+        "villageHall": {
+          "produce": {
+            "crown-authority:authority": 3
+          }
+        },
+        "townHall": {
+          "produce": {
+            "crown-authority:authority": 3
+          }
+        },
+        "cityHall": {
+          "produce": {
+            "crown-authority:authority": 3
+          }
+        },
+        "capitol": {
+          "produce": {
+            "crown-authority:authority": 8
+          }
+        },
+        "fort": {
+          "name": "Fort — Royal Council",
+          "description": "Fortifications defend the town. With a visiting hero, click this fort, citadel or castle to convene the Royal Council and spend Crown Authority. One successful decree per town per week.",
+          "manualHeroVisit": true,
+          "configuration": {
+            "visitMode": "once",
+            "selectMode": "selectPlayer",
+            "canRefuse": true,
+            "resetParameters": {
+              "period": 7,
+              "visitors": true
+            },
+            "onSelectMessage": "{The Royal Council}\n\nChoose an affordable edict or decree. Costs are paid from your kingdom’s Crown Authority. One successful decree per town per week. Hover each choice for its full effect.",
+            "onVisitedMessage": "{The Royal Council}\n\nThis town’s council has already issued its decree. It reconvenes at the start of next week, even if the town changes owner.",
+            "onEmptyMessage": "{The Royal Council}\n\nNo decree is affordable. Earn +3 Crown Authority per town each new day, plus +5 for each built Capitol. The cheapest decree costs 8.",
+            "rewards": [
+              {
+                "message": "{Royal Levy}\n\nCollect 2500 gold immediately.\n\n12 Crown Authority spent. This council reconvenes at the start of next week.",
+                "description": "Royal Levy — 12 Authority. Collect 2500 gold immediately.",
+                "limiter": {
+                  "resources": {
+                    "crown-authority:authority": 12
+                  }
+                },
+                "resources": {
+                  "crown-authority:authority": -12,
+                  "gold": 2500
+                }
+              },
+              {
+                "message": "{Supply Writ}\n\nCollect 8 wood and 8 ore immediately.\n\n12 Crown Authority spent. This council reconvenes at the start of next week.",
+                "description": "Supply Writ — 12 Authority. Collect 8 wood and 8 ore immediately.",
+                "limiter": {
+                  "resources": {
+                    "crown-authority:authority": 12
+                  }
+                },
+                "resources": {
+                  "crown-authority:authority": -12,
+                  "wood": 8,
+                  "ore": 8
+                }
+              },
+              {
+                "message": "{Royal Roads Edict}\n\nAll your heroes gain +300 land movement each new day for 7 days.\n\n18 Crown Authority spent. This council reconvenes at the start of next week.",
+                "description": "Royal Roads Edict — 18 Authority. All your heroes gain +300 land movement each new day for 7 days.",
+                "limiter": {
+                  "resources": {
+                    "crown-authority:authority": 18
+                  }
+                },
+                "resources": {
+                  "crown-authority:authority": -18
+                },
+                "playerBonuses": [
+                  {
+                    "type": "MOVEMENT",
+                    "subtype": "heroMovementLand",
+                    "val": 300,
+                    "duration": "N_DAYS",
+                    "turns": 7,
+                    "stacking": "crown-authority.royalMarch.0",
+                    "description": "Royal Roads Edict"
+                  }
+                ]
+              },
+              {
+                "message": "{Banner of Unity}\n\nYour kingdom gains +1 morale for 7 days. Normal morale immunity and caps apply.\n\n15 Crown Authority spent. This council reconvenes at the start of next week.",
+                "description": "Banner of Unity — 15 Authority. Your kingdom gains +1 morale for 7 days. Normal morale immunity and caps apply.",
+                "limiter": {
+                  "resources": {
+                    "crown-authority:authority": 15
+                  }
+                },
+                "resources": {
+                  "crown-authority:authority": -15
+                },
+                "playerBonuses": [
+                  {
+                    "type": "MORALE",
+                    "val": 1,
+                    "duration": "N_DAYS",
+                    "turns": 7,
+                    "stacking": "crown-authority.royalValor.0",
+                    "description": "Banner of Unity"
+                  }
+                ]
+              },
+              {
+                "message": "{Festival Decree}\n\nYour kingdom gains +1 luck for 7 days. Normal luck caps apply.\n\n15 Crown Authority spent. This council reconvenes at the start of next week.",
+                "description": "Festival Decree — 15 Authority. Your kingdom gains +1 luck for 7 days. Normal luck caps apply.",
+                "limiter": {
+                  "resources": {
+                    "crown-authority:authority": 15
+                  }
+                },
+                "resources": {
+                  "crown-authority:authority": -15
+                },
+                "playerBonuses": [
+                  {
+                    "type": "LUCK",
+                    "val": 1,
+                    "duration": "N_DAYS",
+                    "turns": 7,
+                    "stacking": "crown-authority.royalFortune.0",
+                    "description": "Festival Decree"
+                  }
+                ]
+              },
+              {
+                "message": "{Writ of Steel}\n\nYour kingdom gains +1 Attack and +1 Defense for 7 days.\n\n20 Crown Authority spent. This council reconvenes at the start of next week.",
+                "description": "Writ of Steel — 20 Authority. Your kingdom gains +1 Attack and +1 Defense for 7 days.",
+                "limiter": {
+                  "resources": {
+                    "crown-authority:authority": 20
+                  }
+                },
+                "resources": {
+                  "crown-authority:authority": -20
+                },
+                "playerBonuses": [
+                  {
+                    "type": "PRIMARY_SKILL",
+                    "subtype": "attack",
+                    "val": 1,
+                    "duration": "N_DAYS",
+                    "turns": 7,
+                    "stacking": "crown-authority.steelWrit.0",
+                    "description": "Writ of Steel"
+                  },
+                  {
+                    "type": "PRIMARY_SKILL",
+                    "subtype": "defence",
+                    "val": 1,
+                    "duration": "N_DAYS",
+                    "turns": 7,
+                    "stacking": "crown-authority.steelWrit.1",
+                    "description": "Writ of Steel"
+                  }
+                ]
+              },
+              {
+                "message": "{Arcane Council}\n\nYour kingdom gains +1 Spell Power and +1 Knowledge for 7 days.\n\n20 Crown Authority spent. This council reconvenes at the start of next week.",
+                "description": "Arcane Council — 20 Authority. Your kingdom gains +1 Spell Power and +1 Knowledge for 7 days.",
+                "limiter": {
+                  "resources": {
+                    "crown-authority:authority": 20
+                  }
+                },
+                "resources": {
+                  "crown-authority:authority": -20
+                },
+                "playerBonuses": [
+                  {
+                    "type": "PRIMARY_SKILL",
+                    "subtype": "spellpower",
+                    "val": 1,
+                    "duration": "N_DAYS",
+                    "turns": 7,
+                    "stacking": "crown-authority.arcaneCouncil.0",
+                    "description": "Arcane Council"
+                  },
+                  {
+                    "type": "PRIMARY_SKILL",
+                    "subtype": "knowledge",
+                    "val": 1,
+                    "duration": "N_DAYS",
+                    "turns": 7,
+                    "stacking": "crown-authority.arcaneCouncil.1",
+                    "description": "Arcane Council"
+                  }
+                ]
+              },
+              {
+                "message": "{Royal Relief}\n\nRestore up to 30 spell points to the visiting hero, up to their normal maximum.\n\n8 Crown Authority spent. This council reconvenes at the start of next week.",
+                "description": "Royal Relief — 8 Authority. Restore up to 30 spell points to the visiting hero, up to their normal maximum.",
+                "limiter": {
+                  "resources": {
+                    "crown-authority:authority": 8
+                  }
+                },
+                "resources": {
+                  "crown-authority:authority": -8
+                },
+                "manaPoints": 30
+              },
+              {
+                "message": "{Dread Proclamation}\n\nFor 7 days, enemies fighting THIS visiting hero suffer -1 morale. Morale-immune enemies are unaffected.\n\n20 Crown Authority spent. This council reconvenes at the start of next week.",
+                "description": "Dread Proclamation — 20 Authority. For 7 days, enemies fighting THIS visiting hero suffer -1 morale. Morale-immune enemies are unaffected.",
+                "limiter": {
+                  "resources": {
+                    "crown-authority:authority": 20
+                  }
+                },
+                "resources": {
+                  "crown-authority:authority": -20
+                },
+                "bonuses": [
+                  {
+                    "type": "MORALE",
+                    "val": -1,
+                    "duration": "N_DAYS",
+                    "turns": 7,
+                    "stacking": "crown-authority.dreadProclamation.0",
+                    "description": "Dread Proclamation",
+                    "propagator": "BATTLE_WIDE",
+                    "propagationUpdater": "BONUS_OWNER_UPDATER",
+                    "limiters": [
+                      "OPPOSITE_SIDE"
+                    ]
+                  }
+                ]
+              },
+              {
+                "message": "{War of Whispers}\n\nFor 7 days, enemies fighting THIS visiting hero suffer -1 luck, subject to VCMI luck rules.\n\n20 Crown Authority spent. This council reconvenes at the start of next week.",
+                "description": "War of Whispers — 20 Authority. For 7 days, enemies fighting THIS visiting hero suffer -1 luck, subject to VCMI luck rules.",
+                "limiter": {
+                  "resources": {
+                    "crown-authority:authority": 20
+                  }
+                },
+                "resources": {
+                  "crown-authority:authority": -20
+                },
+                "bonuses": [
+                  {
+                    "type": "LUCK",
+                    "val": -1,
+                    "duration": "N_DAYS",
+                    "turns": 7,
+                    "stacking": "crown-authority.whisperCampaign.0",
+                    "description": "War of Whispers",
+                    "propagator": "BATTLE_WIDE",
+                    "propagationUpdater": "BONUS_OWNER_UPDATER",
+                    "limiters": [
+                      "OPPOSITE_SIDE"
+                    ]
+                  }
+                ]
+              },
+              {
+                "message": "{Weapons Embargo}\n\nFor 7 days, enemy troops fighting THIS visiting hero suffer -2 Attack.\n\n24 Crown Authority spent. This council reconvenes at the start of next week.",
+                "description": "Weapons Embargo — 24 Authority. For 7 days, enemy troops fighting THIS visiting hero suffer -2 Attack.",
+                "limiter": {
+                  "resources": {
+                    "crown-authority:authority": 24
+                  }
+                },
+                "resources": {
+                  "crown-authority:authority": -24
+                },
+                "bonuses": [
+                  {
+                    "type": "PRIMARY_SKILL",
+                    "subtype": "attack",
+                    "val": -2,
+                    "duration": "N_DAYS",
+                    "turns": 7,
+                    "stacking": "crown-authority.weaponsEmbargo.0",
+                    "description": "Weapons Embargo",
+                    "propagator": "BATTLE_WIDE",
+                    "propagationUpdater": "BONUS_OWNER_UPDATER",
+                    "limiters": [
+                      "OPPOSITE_SIDE"
+                    ]
+                  }
+                ]
+              },
+              {
+                "message": "{Shatter Shields Sanction}\n\nFor 7 days, enemy troops fighting THIS visiting hero suffer -2 Defense.\n\n24 Crown Authority spent. This council reconvenes at the start of next week.",
+                "description": "Shatter Shields Sanction — 24 Authority. For 7 days, enemy troops fighting THIS visiting hero suffer -2 Defense.",
+                "limiter": {
+                  "resources": {
+                    "crown-authority:authority": 24
+                  }
+                },
+                "resources": {
+                  "crown-authority:authority": -24
+                },
+                "bonuses": [
+                  {
+                    "type": "PRIMARY_SKILL",
+                    "subtype": "defence",
+                    "val": -2,
+                    "duration": "N_DAYS",
+                    "turns": 7,
+                    "stacking": "crown-authority.siegeSanction.0",
+                    "description": "Shatter Shields Sanction",
+                    "propagator": "BATTLE_WIDE",
+                    "propagationUpdater": "BONUS_OWNER_UPDATER",
+                    "limiters": [
+                      "OPPOSITE_SIDE"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

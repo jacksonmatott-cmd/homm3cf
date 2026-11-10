@@ -1,0 +1,29 @@
+{
+  "name": "heroes3-personal-cloudflare",
+  "private": true,
+  "version": "6.0.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "test": "node --test",
+    "verify": "python3 scripts/verify-package.py",
+    "package": "python3 scripts/package.py",
+    "setup": "node scripts/setup-cloudflare.mjs",
+    "set-account": "node scripts/set-account.mjs",
+    "upload-game": "node scripts/upload-game.mjs",
+    "deploy": "wrangler deploy",
+    "prepare-upload": "node scripts/prepare-pages-upload.mjs",
+    "build": "node scripts/build-web.mjs",
+    "hydrate": "node scripts/hydrate-assets.mjs",
+    "build:cloudflare": "npm run hydrate && npm run package"
+  },
+  "devDependencies": {
+    "@noble/hashes": "1.8.0",
+    "esbuild": "0.28.2",
+    "json5": "2.2.3",
+    "wrangler": "^4.0.0"
+  },
+  "description": "Direct-upload Cloudflare Pages Heroes III browser site with on-site accounts and private D1 game uploads"
+}

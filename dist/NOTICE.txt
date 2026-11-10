@@ -1,0 +1,57 @@
+HEROES III PERSONAL EDITION — OPEN-SOURCE NOTICES
+
+This package does not include original Heroes of Might and Magic III commercial
+assets. Import game data only from your own compatible installation.
+Heroes of Might and Magic is a trademark of Ubisoft. This project is not
+associated with, sponsored by, or endorsed by Ubisoft.
+
+The vcmiclient.js, vcmiclient.wasm and vcmiclient.data runtime files are unchanged
+from homm3-browser v0.1.0 by mihaicristianfarcas and contributors:
+https://github.com/mihaicristianfarcas/homm3-browser/releases/tag/v0.1.0
+This browser port is licensed GPL-2.0-or-later. See LICENSE.txt.
+Corresponding engine/browser-port source and build scripts are provided in:
+source/homm3-browser-v0.1.0.tar.gz
+The source includes the SDL2 browser-worker patch and build dependency versions.
+ENGINE.json records runtime file sizes and SHA-256 hashes.
+
+VCMI: Copyright (C) 2007-2025 VCMI Team, as stated in the upstream source.
+See the AUTHORS and license files inside the included VCMI source for contributors.
+VCMI source code is GPL-2.0-or-later. VCMI's own assets are CC-BY-SA 4.0.
+https://github.com/vcmi/vcmi
+https://github.com/vcmi/vcmi-assets
+https://creativecommons.org/licenses/by-sa/4.0/
+No claim is made that VCMI's license covers Ubisoft's original game assets.
+
+Runtime dependencies are those of the unchanged upstream build, including
+Emscripten, SDL2 and companion ports, Boost, oneTBB, zlib/minizip, libsquish,
+FuzzyLite, and the image/font/audio libraries referenced by its build scripts.
+Their authors retain their copyrights and licenses. The included source retains
+upstream notices; consult its scripts/build-deps.sh and docs/building.md for the
+pinned library versions, source locations and toolchain instructions.
+
+Launcher modifications: November 8, 2026. Distributed GPL-2.0-or-later, using the
+same license as the browser port. The original castle illustration and launcher
+interface in this edition were created for this package and are distributed
+under that same license. Source, tests and packaging tools are provided in:
+source/personal-launcher-source.zip
+Changes in v3 Free Edition: remove the separate storage-service dependency;
+add AES-256-GCM encrypted static game chunks; store small cloud-save parts in
+free D1; move password stretching to the browser; retain private login,
+revision conflict protection, portable backups and shared-device cleanup.
+The project and setup scripts do not activate a paid plan or storage product.
+Engine binaries and game mechanics were not modified. Original commercial
+game content is not included; your own home setup supplies it once.
+
+This package is supplied without warranty; see the full GPL terms in LICENSE.txt.
+
+Changes in v5 Website Uploads: add website account registration, per-account
+private compressed/encrypted game-file uploads in free D1, shared storage
+reservations and browser cache isolation. Deliver a complete prebuilt Pages
+ZIP. No local setup scripts are required by users. @noble/hashes 1.8.0 is MIT;
+its license is included at source/noble-hashes-LICENSE.txt.
+
+Changes in v6 Crown Authority (November 10, 2026): native custom resource
+with town/Capitol daily income, twelve paid council edicts/decrees, seven-day
+bonuses and opponent-only hero combat sanctions; optional compatibility for
+Three Realms. Original game graphic references are resolved from the user's
+private installed library. No Ubisoft image files are added to this package.

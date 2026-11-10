@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#141c19">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Your private Heroes III library and cloud saves, available after sign-in from another computer.">
+  <title>Heroes III · Personal Edition</title>
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="canvas" tabindex="0" aria-label="Heroes of Might and Magic III game"></canvas>
+  <div id="overlay" class="overlay">
+    <div class="shell">
+      <header class="masthead">
+        <a class="wordmark" href="./" aria-label="Heroes III launcher"><img src="icon.svg" width="34" height="38" alt=""><span>HEROES <b>III</b><small>PERSONAL EDITION</small></span></a>
+        <span class="engine-badge"><i></i> VCMI 1.7.5 <span class="desktop"> / BROWSER ENGINE</span></span>
+      </header>
+      <main class="layout">
+        <section class="hero" aria-label="Welcome">
+          <p class="eyebrow">A CLASSIC, REVISITED</p>
+          <h1>One more<br><em>turn.</em></h1>
+          <p class="intro">Your heroes. Your progress. Wherever you sign in. Return to a familiar world from a different browser tab.</p>
+          <div class="realm-art" aria-hidden="true">
+            <svg viewBox="0 0 600 340" fill="none">
+              <defs><linearGradient id="sky" x2="0" y2="340" gradientUnits="userSpaceOnUse"><stop stop-color="#d1ad69" stop-opacity=".14"/><stop offset="1" stop-color="#d1ad69" stop-opacity="0"/></linearGradient><linearGradient id="land" x2="0" y2="340" gradientUnits="userSpaceOnUse"><stop stop-color="#526354"/><stop offset="1" stop-color="#1a2821"/></linearGradient></defs>
+              <path d="M80 295A220 220 0 1 1 520 295" stroke="#9e8a58" stroke-opacity=".25"/>
+              <path d="M107 295A193 193 0 1 1 493 295" stroke="#9e8a58" stroke-opacity=".13" stroke-dasharray="3 9"/>
+              <circle cx="338" cy="110" r="48" fill="url(#sky)" stroke="#b49b60" stroke-opacity=".3"/>
+              <path d="m24 263 100-110 44 49 43-72 67 84 38-43 53 36 35-61 87 94 47-14 39 55" fill="#24372f" stroke="#6a775b" stroke-opacity=".3"/>
+              <path d="m73 290 66-57 53 24 51-65 57 61 53-34 59 55 45-22 65 45" fill="url(#land)"/>
+              <path d="m181 316 36-53 58-18 54 14 66 58" fill="#1c2923" stroke="#a18b55" stroke-opacity=".32"/>
+              <path d="M238 264v-92l-8-1 15-29 15 29-8 1v92m30-9V135l-10-1 20-43 20 43-10 1v121m30 9v-92l-8-1 15-29 15 29-8 1v99" fill="#28382c" stroke="#c0a16b" stroke-width="1.5"/>
+              <path d="M253 198h17v-9h12v13h20v-13h13v9h16v66h-78z" fill="#293a2e" stroke="#c0a16b" stroke-width="1.5"/>
+              <path d="M281 263v-23a11 11 0 0 1 22 0v23M243 186h5m87 0h5m-50-33h5m-5 19h5m-28 46h5m42 0h5m-11-94h30l-10 8h-20" stroke="#c0a16b" stroke-width="1.5"/>
+              <path d="M305 124v-34m0 0 29 7-29 8" stroke="#c0a16b" stroke-width="1.5" fill="#68563b"/>
+              <path d="M105 309h390M150 323h304M222 335h167" stroke="#a18b55" stroke-opacity=".3"/>
+              <g stroke="#91a077" stroke-opacity=".6"><path d="M96 300v-49m-16 23 16-29 16 29m-31 11 15-27 15 27M450 300v-44m-13 23 13-28 13 28m-26 11 13-26 13 26M479 303v-31m-10 12 10-20 10 20"/></g>
+              <path d="m91 138 2-6 2 6 6 2-6 2-2 6-2-6-6-2zm369-32 2-6 2 6 6 2-6 2-2 6-2-6-6-2z" fill="#c2a568" opacity=".65"/>
+            </svg>
+          </div>
+          <div class="hero-notes"><span>Private game library</span><span>Cloud saves</span><span>One account</span></div>
+        </section>
+        <div class="panel-wrap">
+          <div class="panel">
+            <div class="panel-heading"><span class="eyebrow">YOUR ADVENTURE</span><span class="local-pill">FREE EDITION</span></div><div id="account-strip" class="account-strip" hidden><span id="account-name"></span><button id="logout" class="text-button" type="button">Sign out</button></div>
+            <section id="screen-login" class="screen">
+              <h2>Your kingdom, anywhere.</h2><p>Sign in to load your private game library and pick up your cloud saves.</p>
+              <form id="login-form" class="login-form">
+                <label for="username">Username</label><input id="username" name="username" autocomplete="username" required maxlength="80" autocapitalize="none" spellcheck="false">
+                <label for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" autocapitalize="none" autocorrect="off" spellcheck="false" required maxlength="256">
+                <label class="password-choice"><input id="show-password" type="checkbox" aria-controls="password"> Show password</label>
+                <button id="login" type="submit" class="primary play">Sign in <span aria-hidden="true">↗</span></button>
+                <p id="login-error" class="error" role="alert" hidden></p>
+              </form>
+              <p class="hint">New here? <button id="open-signup" type="button" class="text-button">Create an account</button>, then upload your owned game files right here.</p>
+            </section>
+            <section id="screen-signup" class="screen" hidden>
+              <h2>Build your kingdom.</h2><p>Create an account, then select your installed game folder on this website.</p>
+              <form id="signup-form" class="login-form">
+                <label for="new-username">Username</label><input id="new-username" autocomplete="username" pattern="[A-Za-z0-9_-]{3,40}" minlength="3" maxlength="40" required autocapitalize="none" spellcheck="false">
+                <label for="new-password">Password · at least 14 characters</label><input id="new-password" type="password" autocomplete="new-password" minlength="14" maxlength="256" required>
+                <label for="confirm-password">Confirm password</label><input id="confirm-password" type="password" autocomplete="new-password" minlength="14" maxlength="256" required>
+                <label class="password-choice"><input id="show-new-password" type="checkbox"> Show passwords</label>
+                <button id="register" type="submit" class="primary play">Create account <span aria-hidden="true">↗</span></button><p id="signup-error" class="error" role="alert" hidden></p>
+              </form><button id="back-login" type="button" class="text-button">Back to sign in</button><p class="hint">Keep your password somewhere safe. This personal site has no email password recovery. Up to 20 accounts share the free storage allowance.</p>
+            </section>
+            <section id="screen-library" class="screen" hidden>
+              <h2>Bring your world.</h2><p>Choose the installed <strong>Heroes III Complete / Shadow of Death</strong> folder on this computer. It must contain Data, Maps and Mp3. The HD Edition is incompatible.</p>
+              <label for="game-folder" class="hint">Your game folder</label><input id="game-folder" type="file" webkitdirectory multiple>
+              <label class="password-choice"><input id="include-music" type="checkbox" checked> Include optional music</label>
+              <p id="upload-selection" class="hint">Your files are compressed and encrypted in your browser before upload.</p>
+              <button id="upload-library" type="button" class="primary play">Upload game files <span aria-hidden="true">↗</span></button>
+              <div class="progress"><div class="bar"><div id="upload-bar"></div></div><p id="upload-label" class="hint" role="status"></p></div>
+              <p class="hint">Keep this tab open. Limit: 240 MiB compressed per library, within this site's shared free storage. If it does not fit, try without music or extra maps. Your previous library is kept until the replacement finishes; replacing it needs room for both copies.</p>
+              <div class="actions"><button id="library-back" type="button" class="secondary" hidden>Back to launcher</button><button id="remove-library" type="button" class="text-button" hidden>Remove stored game files</button></div>
+            </section>
+            <section id="screen-cache" class="screen" hidden><h2>Keep the previous saves safe.</h2><p>This browser has saves from another account or an older site version. Export them before clearing the local cache for the account you just signed in to.</p><div class="actions"><button id="cache-backup" type="button" class="primary">Export previous saves &amp; continue</button><button id="cache-signout" type="button" class="secondary">Back to sign in</button></div><p class="hint">The downloaded backup can be restored after signing in to its original account. Cloud files stay with their account.</p></section>
+            <section id="screen-setup" class="screen" hidden><h2>Connect your free storage.</h2><p id="setup-message">Upload this complete ZIP to Cloudflare Pages. Add a free D1 database binding named DB in Settings → Bindings, then redeploy the same ZIP.</p><p>Once connected, create an account here and upload your owned game files on the website. No setup scripts or R2 are needed.</p><button id="retry-setup" class="secondary" type="button">Check setup again</button></section>
+            <section id="screen-syncing" class="screen loading" hidden><div class="spinner" aria-hidden="true"></div><h2>Bringing your kingdom along.</h2><p id="sync-label" role="status">Checking your cloud saves…</p></section>
+            <section id="screen-download" class="screen" hidden><h2>Opening your library.</h2><p>Your game files download automatically after sign-in. The first visit on a computer can take a few minutes.</p><div class="progress"><div class="bar"><div id="download-bar"></div></div><p id="download-label" class="hint" role="status">Checking cached files…</p></div><p class="hint">Keep this tab open. Completed files are kept if you need to retry.</p></section>
+            <section id="screen-conflict" class="screen" hidden><h2>Two adventures to choose from.</h2><p id="conflict-description">This computer has local saves and the cloud has a different version. Both copies are kept until you choose.</p><div class="actions"><button id="use-cloud" class="primary" type="button">Use cloud saves</button><button id="use-device" class="secondary" type="button">Upload this device’s saves</button><button id="conflict-export" class="text-button" type="button">Export this device’s saves</button></div><p class="hint">Choosing cloud saves first downloads a safety backup of this device’s saves. Earlier cloud uploads remain in the last five cloud backups.</p></section>
+            <section id="screen-launcher" class="screen" hidden>
+              <h2>Your kingdom awaits.</h2><p>Your private library is ready. Pick up where you left off, or start a new adventure.</p>
+              <ul id="data-status" class="checklist"></ul>
+              <div class="preferences"><label><input id="sound" type="checkbox" checked> Sound & music</label><label><input id="sharp" type="checkbox" checked> Sharp pixels</label></div>
+              <div class="town-choice"><label><input id="three-realms" type="checkbox"> <strong>Three Realms</strong><span>Enable 3 additional towns</span></label><p class="hint">Grove · Pavilion · Cathedral. First use downloads about 80 MB. Keep enabled when loading a Three Realms save.</p><details><summary>Meet the three towns <span aria-hidden="true">+</span></summary><div class="town-cards"><article><img src="town-previews/grove.webp" alt="Grove town screen" loading="lazy"><h3>Grove</h3><p>Small maps · inexpensive early armies, fast recruitment, and low resource costs.</p></article><article><img src="town-previews/pavilion.webp" alt="Pavilion town screen" loading="lazy"><h3>Pavilion</h3><p>Medium to large maps · caravans, hero training, and a balanced midgame army.</p></article><article><img src="town-previews/cathedral.webp" alt="Cathedral town screen" loading="lazy"><h3>Cathedral</h3><p>Large maps and long campaigns · costly investment, lasting income, and powerful elite troops.</p></article></div><p class="hint">Choose these factions in a new game or random map. Fixed original campaigns keep their authored towns; campaigns must support the added factions. <a href="THREE-REALMS.md">Details &amp; credits</a></p></details></div>
+              <div class="town-choice crown-choice"><label><input id="crown-authority" type="checkbox"> <strong>Crown Authority</strong><span>Royal councils, edicts &amp; decrees</span></label><p class="hint">Earn +3 Authority per town each day, plus +5 for each Capitol. Visit a town with a hero and click its fort, citadel or castle to issue a decree. Start a new game with this enabled; keep it enabled for those saves.</p><details><summary>The Royal Council <span aria-hidden="true">+</span></summary><div><p>Spend Authority on 12 political actions: treasury and supplies, kingdom buffs, or sanctions weakening armies that fight your visiting hero. Each town issues one decree per week. Seven-day buffs of the same kind do not stack.</p><p>Authority is part of the game save. See your balance and income by right-clicking the resource bar, or open Kingdom Overview. It uses the original royal treasury artwork and can be traded at the normal marketplace.</p><a href="CROWN-AUTHORITY.md">All edicts, costs &amp; rules</a></div></details></div>
+              <button id="play" type="button" class="primary play">Enter the realm <span aria-hidden="true">↗</span></button>
+              <button id="sync-cloud" type="button" class="text-button manage">Sync saves now</button><button id="manage-library" type="button" class="text-button manage">Manage game files</button><p id="cloud-status" class="cloud-status" role="status"></p>
+              <p class="hint">Single player and local hot-seat. Choose a mode in the game menu.</p>
+            </section>
+            <section id="screen-loading" class="screen loading" hidden><div class="spinner" aria-hidden="true"></div><h2>Opening the gates.</h2><p id="loading-label" role="status">Loading the browser engine…</p><p class="hint">The first launch downloads about 30 MB of engine files.</p></section>
+            <section id="screen-unsupported" class="screen" hidden><h2>A little setup is needed.</h2><p>This page needs HTTPS and a current desktop browser. These features are unavailable:</p><ul id="unsupported-list" class="checklist bad"></ul><p class="hint">Open your deployed HTTPS address in Chrome, Edge, Firefox, or Safari 17+. The browser must allow these features for the game to run.</p></section>
+            <section id="screen-ended" class="screen" hidden><h2 id="ended-title">Until next time.</h2><p id="ended-message"></p><pre id="ended-log" class="log" hidden></pre><div class="actions"><button id="restart" class="primary" type="button">Back to launcher</button><a id="new-tab" class="button primary" target="_blank" rel="noopener" hidden>Open a new tab</a></div></section>
+            <section id="save-tools" class="save-tools" aria-label="Save backups">
+              <div><h3>Your progress comes with you.</h3><span>Cloud saves and a backup you can keep.</span></div>
+              <div class="actions"><button id="backup" type="button" class="secondary">Export saves</button><button id="restore" type="button" class="secondary">Restore backup</button><input id="restore-input" type="file" accept=".h3backup,application/json" hidden></div>
+              <button id="cloud-history" type="button" class="text-button small">Earlier cloud backups</button><div id="history-list" class="history-list" hidden></div><label class="shared-choice"><input id="shared-device" type="checkbox" checked> Shared computer: clear local files when I sign out</label><p id="storage-info" class="hint"></p><button id="persist" type="button" class="text-button small">Ask browser to keep storage</button>
+            </section>
+            <p id="notice" class="notice" role="status" hidden></p><button id="retry-connection" class="secondary retry" type="button" hidden>Retry connection</button>
+          </div>
+          <div class="field-guide">
+            <details><summary>How does another computer work?<span aria-hidden="true">+</span></summary><div><p>Open this same website and sign in. Your private game library downloads automatically; no game folder needs to be selected on that computer.</p><p>Save in the game, then quit or use <strong>Return &amp; sync</strong>. Keep the tab open until the launcher confirms <strong>Synced to cloud</strong>. Sign in on the other computer to continue from that upload.</p><p>On a shared computer, keep the cleanup option checked and use <strong>Sign out</strong> when you finish. Signing out syncs first, then clears this device’s downloaded game files and local saves.</p></div></details>
+            <details><summary>What needs one-time setup?<span aria-hidden="true">+</span></summary><div><p>Upload the complete site ZIP to Cloudflare Pages, then bind a free D1 database as <code>DB</code> and redeploy. Open the website, create your account, and select your own installed <strong>Heroes III Complete</strong> or <strong>Shadow of Death</strong> folder on the upload screen.</p><p>Your browser compresses and encrypts your upload. Your account stores it privately in the free database. Signing in on another computer downloads it automatically. The commercial game files are not included in this download. The HD Edition is not compatible.</p><p>VCMI 1.7.5 supplies the browser engine. Scenarios, campaigns, random maps and local hot-seat use your installed game content. Original graphics are preserved; videos, Horn of the Abyss and online multiplayer are not included.</p></div></details>
+          </div>
+        </div>
+      </main>
+      <footer><span>An old world. A new way in.</span><button id="show-credits" type="button" class="text-button">Credits & source <span aria-hidden="true">↗</span></button></footer>
+    </div>
+  </div>
+  <button id="return-to-launcher" class="return-button secondary" type="button" hidden>Return &amp; sync</button>
+  <button id="fullscreen" class="corner-button" type="button" title="Toggle fullscreen" aria-label="Toggle fullscreen" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+  <dialog id="credits"><button id="close-credits" class="dialog-close secondary" type="button" aria-label="Close credits">×</button><p class="eyebrow">BUILT ON OPEN SOURCE</p><h2>Standing on giants.</h2><p>Game engine: <a href="https://vcmi.eu/" target="_blank" rel="noopener">VCMI</a>, copyright VCMI Team and contributors, GPL-2.0-or-later. Browser port: <a href="https://github.com/mihaicristianfarcas/homm3-browser" target="_blank" rel="noopener">homm3-browser v0.1.0</a>, based on VCMI 1.7.5.</p><p>The browser engine binaries are unchanged. This edition adds private account access, private per-account game uploads, free D1 cloud saves, Crown Authority councils, and portable backups. Launcher changes: November 10, 2026, GPL-2.0-or-later.</p><p>Three Realms adapts Grove, Pavilion and Cathedral by their community authors, with artwork under CC-BY-SA 4.0. <a href="THREE-REALMS.md">Town credits, changes and licenses</a>.</p><p><a href="source/homm3-browser-v0.1.0.tar.gz" download>Download engine source</a> · <a href="source/personal-launcher-source.zip" download>Download launcher source</a> · <a href="LICENSE.txt">GPL license</a> · <a href="NOTICE.txt">Third-party notices</a></p><p class="hint">Heroes of Might and Magic is a trademark of Ubisoft. Original game content is not included. This project is not affiliated with or endorsed by Ubisoft. VCMI’s own assets are CC-BY-SA 4.0; see the included source and notices.</p></dialog>
+  <noscript><p class="noscript">Enable JavaScript to use the browser launcher.</p></noscript>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
