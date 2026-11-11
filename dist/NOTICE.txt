@@ -74,3 +74,9 @@ requests, bulk SQL inserts, native checksum verification, 64 KiB upload parts,
 idempotent retries and paged private file-list reads. Preserve existing binary
 and base64 libraries, accounts and saves. Report provider status and upload
 step without rendering provider HTML. Add full-folder/retry/quota regressions.
+
+Changes in v6.2.1 Crown resource pickup fix (November 10, 2026): register the
+Authority resource map-object subtype required by VCMI random-resource
+selection. Use a reference to the existing AVTgold0.def animation; no original
+commercial artwork is bundled. Preserve original resource IDs, game binaries,
+accounts, libraries and saves. Add checks against the pinned engine source.

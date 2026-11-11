@@ -1,4 +1,4 @@
-# Crown Authority — Royal Council v1.0
+# Crown Authority — Royal Council v1.0.1
 
 Enable **Crown Authority** on the launcher before starting a **new game**. It is an original politics mod inspired by empire-management games, with twelve edicts and decrees. It uses the existing Heroes III town/fort/capitol/treasury graphical pieces through your uploaded compatible game library. It contains no Roblox code or copied Roblox assets.
 
@@ -10,7 +10,7 @@ For example, three towns, including one with a Capitol, produce **14 Authority p
 
 Authority belongs to the in-game kingdom/player color, not the website account across all matches. Each new game starts its own economy. Its balance, council visits and remaining effect durations are held in the normal VCMI save, so the existing cloud-save/backup flow carries them between computers after you save and sync.
 
-Right-click the resource bar for balances and daily income, or open Kingdom Overview. Authority reuses the original treasury icons and is named **Crown Authority** in tooltips. VCMI 1.7.5 treats custom resources as tradable: normal marketplaces can buy/sell Authority at a base valuation of 250 gold. It is not restricted to daily town income only.
+Right-click the resource bar for balances and daily income, or open Kingdom Overview. Authority reuses the original treasury icons and is named **Crown Authority** in tooltips. VCMI 1.7.5 treats custom resources as tradable: normal marketplaces can buy/sell Authority at a base valuation of 250 gold. It is not restricted to daily town income only. Generic random-resource placeholders in VCMI 1.7.5 may also resolve to a small Authority cache (1–3 when its amount is randomized), shown with the original gold-pile artwork. The mod does not add Authority caches directly to random-map treasure pools.
 
 ## Convene the council
 
@@ -53,3 +53,9 @@ Your local Windows folder is not reachable from the website or from this develop
 Mod rules: `mods/crown-authority-rules.json`; builder: `scripts/build-crown-mod.mjs`; browser installer: `dist/crown-worker.js`. The complete website includes the generated `crown-pack`, all Three Realms assets, the engine, accounts and uploads. Source and licenses remain accessible through Credits & source. Original mod code/data is GPL-2.0-or-later; existing Three Realms community content retains its documented CC-BY-SA license.
 
 Validation covers native VCMI 1.7.5 mod/resource/building/reward schemas, scoped compatibility patches, exact income definitions, Authority costs, effect duration/stacking, enemy-side limiters, file checksums, preset preservation, and save-safe installation. Tests use synthetic files; full gameplay with a commercial game library has not been verified here.
+
+## Resource pickup fix (v1.0.1)
+
+The original v1.0 pack defined the custom currency but omitted its matching `core:resource` map-object subtype. VCMI 1.7.5 can select every resource for a random-resource placeholder, so selecting Authority produced `Failed to find object of type 79::7`. The pack now registers the Authority pickup, reusing `AVTgold0.def` from your installed library. Original resource definitions and numeric IDs remain intact; no engine binary is replaced.
+
+Refresh the website and launch with Crown Authority still enabled. The launcher installs the corrected small pack automatically. Existing uploaded game files and saves are kept. Already-created Crown saves can be tried with the updated mod; this update does not remove or rewrite them. Full gameplay with your original commercial files has not been tested in this workspace.

@@ -1,5 +1,5 @@
 {
-  "id": "crown-authority", "version": "1.0.0", "engine": "1.7.5",
+  "id": "crown-authority", "version": "1.0.1", "engine": "1.7.5",
   "resource": "crown-authority:authority", "townIncome": 3, "capitalExtraIncome": 5,
   "councilBuilding": "fort", "sessionPeriodDays": 7,
   "edicts": [

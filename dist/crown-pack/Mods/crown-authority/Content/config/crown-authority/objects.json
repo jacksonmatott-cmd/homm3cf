@@ -1,0 +1,33 @@
+{
+  "core:resource": {
+    "types": {
+      "authority": {
+        "resource": "crown-authority:authority",
+        "aiValue": 500,
+        "amounts": [
+          1,
+          2,
+          3
+        ],
+        "amountMultiplier": 1,
+        "rmg": {
+          "value": 0,
+          "rarity": 0
+        },
+        "templates": {
+          "royalTreasury": {
+            "animation": "AVTgold0.def",
+            "visitableFrom": [
+              "+++",
+              "+-+",
+              "+++"
+            ],
+            "mask": [
+              "VA"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

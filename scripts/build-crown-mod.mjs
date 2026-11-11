@@ -6,6 +6,12 @@ import {createHash} from 'node:crypto';
 const ROOT=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const sha=b=>createHash('sha256').update(b).digest('hex');
 export const CORE_TOWNS=['castle','rampart','tower','inferno','necropolis','dungeon','stronghold','fortress','conflux'];
+export function authorityObjects(rules){
+ // VCMI 1.7.5 random resource placeholders select from every resource ID.
+ // A custom currency therefore also needs the matching core:resource subtype.
+ // Append it naturally; do not replace gold or hard-code resource/subtype IDs.
+ return {'core:resource':{types:{authority:{resource:rules.resource,aiValue:500,amounts:[1,2,3],amountMultiplier:1,rmg:{value:0,rarity:0},templates:{royalTreasury:{animation:'AVTgold0.def',visitableFrom:['+++','+-+','+++'],mask:['VA']}}}}}};
+}
 export function edictReward(edict,rules){
  const reward={message:`{${edict.name}}\n\n${edict.summary}\n\n${edict.cost} Crown Authority spent. This council reconvenes at the start of next week.`,description:`${edict.name} — ${edict.cost} Authority. ${edict.summary}`,limiter:{resources:{[rules.resource]:edict.cost}},resources:{[rules.resource]:-edict.cost,...(edict.resources||{})}};
  for(const key of ['manaPoints'])if(edict[key]!==undefined)reward[key]=edict[key];
@@ -20,9 +26,10 @@ export function townPatch(rules){
 async function writeJSON(file,value){await mkdir(path.dirname(file),{recursive:true});await writeFile(file,JSON.stringify(value,null,2)+'\n');}
 export async function buildCrownMod(){
  const rules=JSON.parse(await readFile(path.join(ROOT,'mods/crown-authority-rules.json'),'utf8')),output=path.join(ROOT,'dist/crown-pack'),base=path.join(output,'Mods/crown-authority');await rm(output,{recursive:true,force:true});
- await writeJSON(path.join(base,'mod.json'),{name:'Crown Authority',description:'Empire politics for Heroes III: automatic daily Authority income, a Royal Council in every fort, and twelve paid edicts and decrees. Uses your original installed town graphics.',version:rules.version,author:'ArcLink Studios / Jackson Matott',modType:'Mechanics',licenseName:'GPL-2.0-or-later',licenseURL:'https://www.gnu.org/licenses/old-licenses/gpl-2.0.html',compatibility:{min:'1.7.5',max:'1.7.99'},resources:['config/crown-authority/resource.json'],factions:['config/crown-authority/core-towns.json']});
+ await writeJSON(path.join(base,'mod.json'),{name:'Crown Authority',description:'Empire politics for Heroes III: automatic daily Authority income, a Royal Council in every fort, and twelve paid edicts and decrees. Uses your original installed town graphics.',version:rules.version,author:'ArcLink Studios / Jackson Matott',modType:'Mechanics',licenseName:'GPL-2.0-or-later',licenseURL:'https://www.gnu.org/licenses/old-licenses/gpl-2.0.html',compatibility:{min:'1.7.5',max:'1.7.99'},resources:['config/crown-authority/resource.json'],objects:['config/crown-authority/objects.json'],factions:['config/crown-authority/core-towns.json']});
  // Supported VCMI image syntax reuses the original gold/royal treasury pieces, without redistributing Ubisoft assets.
  await writeJSON(path.join(base,'Content/config/crown-authority/resource.json'),{authority:{name:'Crown Authority',price:250,images:{small:'SMALRES.def:0:6',medium:'RESOURCE.def:0:6',large:'RESOUR82.def:0:6'}}});
+ await writeJSON(path.join(base,'Content/config/crown-authority/objects.json'),authorityObjects(rules));
  await writeJSON(path.join(base,'Content/config/crown-authority/core-towns.json'),Object.fromEntries(CORE_TOWNS.map(t=>['core:'+t,townPatch(rules)])));
  const towns=JSON.parse(await readFile(path.join(ROOT,'mods/towns.lock.json'),'utf8'));
  for(const t of towns.towns){const sub=path.join(base,'Mods',t.id);await writeJSON(path.join(sub,'mod.json'),{name:`Crown Authority — ${t.name}`,description:`Royal Council and daily Authority for ${t.name}.`,version:rules.version,author:'ArcLink Studios / Jackson Matott',modType:'Compatibility',depends:['crown-authority',t.id],factions:['config/crown-authority/town.json']});await writeJSON(path.join(sub,'Content/config/crown-authority/town.json'),{[t.id+':'+t.faction]:townPatch(rules)});}

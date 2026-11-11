@@ -69,9 +69,18 @@ print(f'PASS: {len(files)} static files; largest asset {max(p.stat().st_size for
 
 crown=json.loads((DIST/'crown-pack/manifest.json').read_text())
 assert crown['id']=='crown-authority' and crown['engine']=='1.7.5'
-assert len(crown['files'])==9
+assert len(crown['files'])==10
 for f in crown['files']:
     p=DIST/'crown-pack'/f['path']
     assert p.stat().st_size==f['size'] and hashlib.sha256(p.read_bytes()).hexdigest()==f['sha256']
 assert 'crown-worker.js' in (DIST/'app.js').read_text() and 'id="crown-authority"' in (DIST/'index.html').read_text()
 print('PASS: Crown Authority native mod files, checksums and launcher checkbox verified.')
+
+mod_path=DIST/'crown-pack/Mods/crown-authority'
+mod=json.loads((mod_path/'mod.json').read_text())
+assert mod['objects']==['config/crown-authority/objects.json'], 'Missing Crown resource map-object registration'
+objects=json.loads((mod_path/'Content/config/crown-authority/objects.json').read_text())
+authority=objects['core:resource']['types']['authority']
+assert authority['resource']=='crown-authority:authority' and authority['amountMultiplier']==1
+assert 'index' not in authority and authority['templates']['royalTreasury']['animation']=='AVTgold0.def'
+print('PASS: Crown Authority resource pickup registration and original graphic reference verified.')

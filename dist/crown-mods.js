@@ -15,5 +15,7 @@ export function validCrownPath(p){return typeof p==='string'&&p.length<300&&p.st
 export function validateCrownManifest(m){
  if(m?.format!==1||m.id!==CROWN_SCOPE||m.engine!=='1.7.5'||!/^[a-f0-9]{64}$/.test(m.version||'')||!Array.isArray(m.files)||!m.files.length||m.files.length>50)throw new Error('Invalid Crown Authority manifest.');
  const paths=new Set();let total=0;for(const f of m.files){if(!validCrownPath(f.path)||paths.has(f.path.toLowerCase())||!Number.isSafeInteger(f.size)||f.size<1||f.size>512*1024||!/^[a-f0-9]{64}$/.test(f.sha256||''))throw new Error('Invalid Crown Authority file.');paths.add(f.path.toLowerCase());total+=f.size;}
- if(total!==m.totalSize||total>2*1024*1024||!paths.has('mods/crown-authority/mod.json'))throw new Error('Incomplete Crown Authority pack.');for(const town of CROWN_TOWNS)if(!paths.has(`mods/crown-authority/mods/${town}/mod.json`))throw new Error('Missing town compatibility mod.');return m;
+ if(total!==m.totalSize||total>2*1024*1024||!paths.has('mods/crown-authority/mod.json'))throw new Error('Incomplete Crown Authority pack.');
+ for(const file of ['resource.json','objects.json','core-towns.json'])if(!paths.has('mods/crown-authority/content/config/crown-authority/'+file))throw new Error('Crown Authority needs its complete resource and map-object definitions. Reload the updated website and retry.');
+ for(const town of CROWN_TOWNS)if(!paths.has(`mods/crown-authority/mods/${town}/mod.json`))throw new Error('Missing town compatibility mod.');return m;
 }

@@ -1,4 +1,4 @@
-# Heroes III Personal Edition v6.2.0 — Batched uploads and launcher reliability
+# Heroes III Personal Edition v6.2.1 — Crown resource pickup fix
 
 **Upload HOMM3-Cloudflare-Upload.zip directly to Cloudflare Pages.** This is the finished website with its compiled backend, engine and Three Realms assets. Create an account on the website and upload your owned game folder there. Other computers only need your login; game files download automatically into the browser.
 
@@ -73,3 +73,7 @@ The GitHub build also runs `npm run test:browser` in Chromium: website signup/lo
 The browser now reserves storage with a small summary, registers file metadata in bounded batches, then sends 64 KiB encrypted parts. Metadata is inserted with two bulk JSON queries instead of a separate statement for every file and part. Native Web Crypto verifies checksums on the server. Lost start, metadata, part and finish replies can be retried without double reservations or partial publication. File-list downloads are paged as well. Existing base64 and binary libraries stay readable; keep the same DB binding.
 
 Upload errors identify the operation, HTTP status and a Cloudflare error/reference when available, rather than replacing every failure with an unreadable-response message. Daily database limits and full storage are reported separately; no paid services are enabled. The synthetic regression suite includes 10,000 file records and a 300 MiB compressed archive plan, incomplete uploads, duplicate paths, quota reservations, lost replies and authenticated paged downloads. These are metadata/fixture tests, not a claim that your original commercial installation has been playtested here.
+
+## v6.2.1 Crown resource registration
+
+Crown Authority v1.0.1 registers the missing resource-pickup subtype that caused `Failed to find object of type 79::7` when a random resource resolved to Authority. It reuses the original gold-pile animation and preserves the original seven resource types, Authority income/councils, existing IDs, saves and uploaded libraries. The browser installer upgrades the small mod pack automatically on the next launch with Crown Authority enabled. Tests check every selectable resource against the exact bundled VCMI 1.7.5 object table and random-resource selection source; this is a data-contract regression, not a full gameplay test with commercial data.

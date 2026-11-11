@@ -1,7 +1,7 @@
 {
   "format": 1,
   "id": "crown-authority",
-  "version": "d5f7ee7ac3423d2097e10d7dd5dbeda4c836378ddd65b7dcc2e884908205b463",
+  "version": "6c23a6361b0cdb6801d91fad85b4252ed1a0009c6ab9334a3e5f803892bbfb78",
   "engine": "1.7.5",
   "files": [
     {
@@ -10,14 +10,19 @@
       "sha256": "86f522852004f9b47daac9a62aff897a574454231f8e17790c6503b50a2792ad"
     },
     {
+      "path": "Mods/crown-authority/Content/config/crown-authority/objects.json",
+      "size": 603,
+      "sha256": "9f83873b6df706a3afaef36583ee203f2213ef760e7ebc8a995545f8e408234e"
+    },
+    {
       "path": "Mods/crown-authority/Content/config/crown-authority/resource.json",
       "size": 200,
       "sha256": "dfde79dc5926e9da996c95c469f985888a91e44570d3f2cfd1f25c123310f451"
     },
     {
       "path": "Mods/crown-authority/mod.json",
-      "size": 633,
-      "sha256": "7ccb079cf63b44f1de76a92971df679723373639d09d272e8f8204ead9520d03"
+      "size": 695,
+      "sha256": "03807b2171dd31f7fe3a7b54673ed9d204b64450ec0bdf99c25327e938cd2036"
     },
     {
       "path": "Mods/crown-authority/Mods/cathedral-town/Content/config/crown-authority/town.json",
@@ -27,7 +32,7 @@
     {
       "path": "Mods/crown-authority/Mods/cathedral-town/mod.json",
       "size": 339,
-      "sha256": "7a1e8f14acca42294aa690d357fd2adffe70bf9491de26167ff60f18de2766ac"
+      "sha256": "4e36865baa5a0a63ea83dab303ff7506a6a019a3f6cc79bfe0999ee77d7b7973"
     },
     {
       "path": "Mods/crown-authority/Mods/grove/Content/config/crown-authority/town.json",
@@ -37,7 +42,7 @@
     {
       "path": "Mods/crown-authority/Mods/grove/mod.json",
       "size": 322,
-      "sha256": "7b2fa40c5a8aba69e9bcd83706b1c46afbbf09822f284a16890eb2a7b238a4d0"
+      "sha256": "f672b26bdb3ddeb787eecf2b76a5ae129872ed230e71dfe26eae8cb46727a437"
     },
     {
       "path": "Mods/crown-authority/Mods/new-pavilion/Content/config/crown-authority/town.json",
@@ -47,8 +52,8 @@
     {
       "path": "Mods/crown-authority/Mods/new-pavilion/mod.json",
       "size": 335,
-      "sha256": "c01b2fc93e17ec7b2c262facee2d8b0d53a24c468b592bf1528ce32478cc741d"
+      "sha256": "3edec83e8b3e2cd918632a1babd670e9929c6d0ae4f20571c4848d5f9be35a51"
     }
   ],
-  "totalSize": 173165
+  "totalSize": 173830
 }
